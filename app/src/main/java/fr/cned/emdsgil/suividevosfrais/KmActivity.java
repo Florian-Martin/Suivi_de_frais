@@ -31,12 +31,8 @@ public class KmActivity extends AppCompatActivity {
 		Global.changeAfficheDate((DatePicker) findViewById(R.id.datKm), false) ;
 		// valorisation des propriétés
 		valoriseProprietes() ;
-        // chargement des méthodes événementielles
-		imgReturn_clic() ;
-		cmdValider_clic() ;
-		cmdPlus_clic() ;
-		cmdMoins_clic() ;
-		dat_clic() ;
+		// chargement des méthodes évènementielles
+		onCreateListenersLoading();
 	}
 
 	@Override
@@ -55,8 +51,19 @@ public class KmActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+	/**
+	 * Chargement des méthodes évènementielles appelées
+	 * lors d'interactions avec les composants de la vue.
+	 */
+	public void onCreateListenersLoading(){
+		imgReturn_clic() ;
+		cmdValider_clic() ;
+		cmdPlus_clic() ;
+		cmdMoins_clic() ;
+		dat_clic() ;
+	}
 
-    /**
+	/**
 	 * Valorisation des propriétés avec les informations affichées
 	 */
 	private void valoriseProprietes() {
