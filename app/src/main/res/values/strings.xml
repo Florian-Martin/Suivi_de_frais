@@ -19,10 +19,16 @@
     <string name="montant">Montant :</string>
     <string name="icone_frais_km">Icone des frais kilométriques</string>
     <string name="icone_frais_repas">Icone des frais de repas</string>
-    <string name="icone_frais_nuitee">Icone des frais de nuitée</string>
-    <string name="icone_frais_etape">Icone des frais d\'étape</string>
+    <string name="icone_frais_nuitees">Icone des frais de nuitée</string>
+    <string name="icone_frais_etapes">Icone des frais d\'étape</string>
     <string name="icone_frais_hf">Icone des frais hors forfait</string>
     <string name="icone_recap_hf">Icone du récapitulatif des frais hors forfait</string>
     <string name="icone_transfert">Icone de la commande de transfert</string>
     <string name="icone_supp_hf">Icône de suppression d\'une ligne de frais</string>
+    <string name="title_frais_nuitees">Frais de nuitées</string>
+    <string name="nuitees">nuitées</string>
+    <string name="title_frais_etapes">Frais d\'étapes</string>
+    <string name="etapes">étapes</string>
+    <string name="title_frais_repas">Frais de repas</string>
+    <string name="repas">repas</string>
 </resources>

@@ -76,8 +76,8 @@
                 android:layout_gravity="center"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/frais_nuitee"
-                android:contentDescription="@string/icone_frais_nuitee"/>
+                android:src="@drawable/frais_nuitees"
+                android:contentDescription="@string/icone_frais_nuitees"/>
 
         </LinearLayout>
 
@@ -95,8 +95,8 @@
                 android:layout_gravity="center"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/frais_etape"
-                android:contentDescription="@string/icone_frais_etape"/>
+                android:src="@drawable/frais_etapes"
+                android:contentDescription="@string/icone_frais_etapes"/>
 
         </LinearLayout>
     </LinearLayout>
