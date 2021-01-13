@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.Locale;
 
@@ -28,6 +30,8 @@ public class RepasActivity extends AppCompatActivity {
         Global.changeAfficheDate((DatePicker) findViewById(R.id.datRepas), false) ;
         // valorisation des propriétés
         valoriseProprietes() ;
+        // chargement des méthodes évènementielles
+        onCreateListenersLoading();
     }
 
     @Override
@@ -44,6 +48,14 @@ public class RepasActivity extends AppCompatActivity {
             retourActivityPrincipale() ;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Chargement des méthodes évènementielles appelées
+     * lors d'interactions avec les composants de la vue.
+     */
+    public void onCreateListenersLoading(){
+        imgReturn_clic();
     }
 
     /**
@@ -67,5 +79,16 @@ public class RepasActivity extends AppCompatActivity {
             qte = Global.listFraisMois.get(key).getRepas() ;
         }
         ((EditText)findViewById(R.id.txtRepas)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
+    }
+
+    /**
+     * Sur la selection de l'image : retour au menu principal
+     */
+    private void imgReturn_clic() {
+        findViewById(R.id.imgRepasReturn).setOnClickListener(new ImageView.OnClickListener() {
+            public void onClick(View v) {
+                retourActivityPrincipale() ;
+            }
+        }) ;
     }
 }

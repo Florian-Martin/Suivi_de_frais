@@ -7,8 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.Locale;
 
@@ -27,7 +29,9 @@ public class NuiteesActivity extends AppCompatActivity {
         // modification de l'affichage du DatePicker
         Global.changeAfficheDate((DatePicker) findViewById(R.id.datNuitees), false) ;
         // valorisation des propriétés
-        valoriseProprietes() ;
+        valoriseProprietes();
+        // chargement des méthodes évènementielles
+        onCreateListenersLoading();
     }
 
     @Override
@@ -44,6 +48,14 @@ public class NuiteesActivity extends AppCompatActivity {
             retourActivityPrincipale() ;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Chargement des méthodes évènementielles appelées
+     * lors d'interactions avec les composants de la vue.
+     */
+    public void onCreateListenersLoading(){
+        imgReturn_clic();
     }
 
     /**
@@ -67,5 +79,16 @@ public class NuiteesActivity extends AppCompatActivity {
             qte = Global.listFraisMois.get(key).getNuitee() ;
         }
         ((EditText)findViewById(R.id.txtNuitees)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
+    }
+
+    /**
+     * Sur la selection de l'image : retour au menu principal
+     */
+    private void imgReturn_clic() {
+        findViewById(R.id.imgNuiteesReturn).setOnClickListener(new ImageView.OnClickListener() {
+            public void onClick(View v) {
+                retourActivityPrincipale() ;
+            }
+        }) ;
     }
 }
