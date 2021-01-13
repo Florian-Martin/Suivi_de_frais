@@ -1,13 +1,18 @@
 package fr.cned.emdsgil.suividevosfrais;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.Locale;
 
-public class RepasActivity extends Activity {
+public class RepasActivity extends AppCompatActivity {
 
     // informations affichées dans l'activité
     private Integer annee ;
@@ -23,6 +28,30 @@ public class RepasActivity extends Activity {
         Global.changeAfficheDate((DatePicker) findViewById(R.id.datRepas), false) ;
         // valorisation des propriétés
         valoriseProprietes() ;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_actions, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getTitle().equals(getString(R.string.retour_accueil))) {
+            retourActivityPrincipale() ;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Retour à l'activité principale (le menu)
+     */
+    private void retourActivityPrincipale() {
+        Intent intent = new Intent(RepasActivity.this, MainActivity.class) ;
+        startActivity(intent) ;
     }
 
     /**

@@ -26,7 +26,7 @@ public class KmActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_km);
-        setTitle("GSB : Frais Km");
+        setTitle("GSB : Frais kilométriques");
 		// modification de l'affichage du DatePicker
 		Global.changeAfficheDate((DatePicker) findViewById(R.id.datKm), false) ;
 		// valorisation des propriétés
