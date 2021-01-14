@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:contentDescription="@string/icon_frais_hf"
+                android:contentDescription="@string/icone_frais_hf"
                 android:src="@drawable/frais_hf" />
         </LinearLayout>
 

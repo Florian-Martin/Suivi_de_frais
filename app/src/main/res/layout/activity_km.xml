@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:layout_weight="1"
-                android:contentDescription="@string/icon_frais_km"
+                android:contentDescription="@string/icone_frais_km"
                 android:src="@drawable/frais_km" />
         </LinearLayout>
 

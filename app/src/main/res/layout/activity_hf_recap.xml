@@ -31,7 +31,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:contentDescription="@string/icon_recap_frais_hf"
+                android:contentDescription="@string/icone_recap_hf"
                 android:src="@drawable/frais_hf_recap" />
         </LinearLayout>
 
