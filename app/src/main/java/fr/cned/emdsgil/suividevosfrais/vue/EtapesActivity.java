@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
+import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 public class EtapesActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class EtapesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_etapes);
         setTitle("GSB : Frais d'étapes");
         // modification de l'affichage du DatePicker
-        Global.changeAfficheDate((DatePicker) findViewById(R.id.datEtapes), false) ;
+        Outils.changeAfficheDate((DatePicker) findViewById(R.id.datEtapes), false) ;
         // valorisation des propriétés
         valoriseProprietes() ;
         // chargement des méthodes évènementielles

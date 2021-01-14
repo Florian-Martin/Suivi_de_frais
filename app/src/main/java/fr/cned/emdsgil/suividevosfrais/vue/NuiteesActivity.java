@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
+import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 public class NuiteesActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class NuiteesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nuitees);
         setTitle("GSB : Frais de nuitées");
         // modification de l'affichage du DatePicker
-        Global.changeAfficheDate((DatePicker) findViewById(R.id.datNuitees), false) ;
+        Outils.changeAfficheDate((DatePicker) findViewById(R.id.datNuitees), false) ;
         // valorisation des propriétés
         valoriseProprietes();
         // chargement des méthodes évènementielles

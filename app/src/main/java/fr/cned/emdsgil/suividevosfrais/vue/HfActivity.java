@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
 import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
+import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
 public class HfActivity extends AppCompatActivity {
@@ -25,7 +26,7 @@ public class HfActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_hf);
         setTitle("GSB : Frais HF");
         // modification de l'affichage du DatePicker
-        Global.changeAfficheDate((DatePicker) findViewById(R.id.datHf), true) ;
+        Outils.changeAfficheDate((DatePicker) findViewById(R.id.datHf), true) ;
 		// mise à 0 du montant
 		((EditText)findViewById(R.id.txtHf)).setText("0") ;
         // chargement des méthodes événementielles

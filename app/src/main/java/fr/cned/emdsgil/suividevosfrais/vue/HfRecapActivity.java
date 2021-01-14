@@ -18,6 +18,7 @@ import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHfAdapter;
 import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
+import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 public class HfRecapActivity extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class HfRecapActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_hf_recap);
         setTitle("GSB : Récap Frais HF");
 		// modification de l'affichage du DatePicker
-		Global.changeAfficheDate((DatePicker) findViewById(R.id.datHfRecap), false) ;
+		Outils.changeAfficheDate((DatePicker) findViewById(R.id.datHfRecap), false) ;
 		// valorisation des propriétés
 		afficheListe() ;
         // chargement des méthodes événementielles
