@@ -1,4 +1,4 @@
-package fr.cned.emdsgil.suividevosfrais;
+package fr.cned.emdsgil.suividevosfrais.vue;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,10 @@ import android.widget.ImageView;
 
 import java.util.Locale;
 
-public class RepasActivity extends AppCompatActivity {
+import fr.cned.emdsgil.suividevosfrais.R;
+import fr.cned.emdsgil.suividevosfrais.outils.Global;
+
+public class NuiteesActivity extends AppCompatActivity {
 
     // informations affichées dans l'activité
     private Integer annee ;
@@ -24,12 +27,12 @@ public class RepasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_repas);
-        setTitle("GSB : Frais de repas");
+        setContentView(R.layout.activity_nuitees);
+        setTitle("GSB : Frais de nuitées");
         // modification de l'affichage du DatePicker
-        Global.changeAfficheDate((DatePicker) findViewById(R.id.datRepas), false) ;
+        Global.changeAfficheDate((DatePicker) findViewById(R.id.datNuitees), false) ;
         // valorisation des propriétés
-        valoriseProprietes() ;
+        valoriseProprietes();
         // chargement des méthodes évènementielles
         onCreateListenersLoading();
     }
@@ -62,7 +65,7 @@ public class RepasActivity extends AppCompatActivity {
      * Retour à l'activité principale (le menu)
      */
     private void retourActivityPrincipale() {
-        Intent intent = new Intent(RepasActivity.this, MainActivity.class) ;
+        Intent intent = new Intent(NuiteesActivity.this, MainActivity.class) ;
         startActivity(intent) ;
     }
 
@@ -70,22 +73,22 @@ public class RepasActivity extends AppCompatActivity {
      * Valorisation des propriétés avec les informations affichées
      */
     private void valoriseProprietes() {
-        annee = ((DatePicker)findViewById(R.id.datRepas)).getYear() ;
-        mois = ((DatePicker)findViewById(R.id.datRepas)).getMonth() + 1 ;
+        annee = ((DatePicker)findViewById(R.id.datNuitees)).getYear() ;
+        mois = ((DatePicker)findViewById(R.id.datNuitees)).getMonth() + 1 ;
         // récupération de la qte correspondant au mois actuel
         qte = 0 ;
         Integer key = annee*100+mois ;
         if (Global.listFraisMois.containsKey(key)) {
-            qte = Global.listFraisMois.get(key).getRepas() ;
+            qte = Global.listFraisMois.get(key).getNuitee() ;
         }
-        ((EditText)findViewById(R.id.txtRepas)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
+        ((EditText)findViewById(R.id.txtNuitees)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
     }
 
     /**
      * Sur la selection de l'image : retour au menu principal
      */
     private void imgReturn_clic() {
-        findViewById(R.id.imgRepasReturn).setOnClickListener(new ImageView.OnClickListener() {
+        findViewById(R.id.imgNuiteesReturn).setOnClickListener(new ImageView.OnClickListener() {
             public void onClick(View v) {
                 retourActivityPrincipale() ;
             }

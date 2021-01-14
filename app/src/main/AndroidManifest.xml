@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/my_backup_rules">
-        <activity android:name=".MainActivity">
+        <activity android:name=".vue.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -21,12 +21,12 @@
                     android:pathPrefix="/recipes" />
             </intent-filter>
         </activity>
-        <activity android:name=".HfActivity" />
-        <activity android:name=".HfRecapActivity" />
-        <activity android:name=".KmActivity" />
-        <activity android:name=".NuiteesActivity" />
-        <activity android:name=".RepasActivity" />
-        <activity android:name=".EtapesActivity" />
+        <activity android:name=".vue.HfActivity" />
+        <activity android:name=".vue.HfRecapActivity" />
+        <activity android:name=".vue.KmActivity" />
+        <activity android:name=".vue.NuiteesActivity" />
+        <activity android:name=".vue.RepasActivity" />
+        <activity android:name=".vue.EtapesActivity" />
     </application>
 
 </manifest>

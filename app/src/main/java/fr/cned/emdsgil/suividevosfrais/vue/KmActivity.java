@@ -1,4 +1,4 @@
-package fr.cned.emdsgil.suividevosfrais;
+package fr.cned.emdsgil.suividevosfrais.vue;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +14,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.util.Locale;
+
+import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
+import fr.cned.emdsgil.suividevosfrais.R;
+import fr.cned.emdsgil.suividevosfrais.outils.Global;
+import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
 public class KmActivity extends AppCompatActivity {
 
