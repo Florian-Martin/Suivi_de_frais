@@ -1,9 +1,12 @@
 package fr.cned.emdsgil.suividevosfrais.controleur;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.DatePicker;
 
+import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
+import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
 /**
  * Classe gérant la partie contrôle du modèle MVC
@@ -107,8 +110,50 @@ public final class Controleur {
                 }
             }
         }
+        enregNewQte();
     }
 
+    /**
+     * Enregistrement dans la zone de texte et dans la liste de la nouvelle quantité, à la date choisie
+     */
+    private void enregNewQte() {
+        // enregistrement dans la liste
+        Integer key = (this.annee * 100) + this.mois;
+        if (!Global.listFraisMois.containsKey(key)) {
+            // creation du mois et de l'annee s'ils n'existent pas déjà
+            Global.listFraisMois.put(key, new FraisMois(this.annee, this.mois));
+        }
+        switch (this.typeFrais) {
+            case "km":
+                Global.listFraisMois.get(key).setKm(this.qte);
+                break;
+
+            case "nuitees":
+                Global.listFraisMois.get(key).setNuitee(this.qte);
+                break;
+
+            case "etapes":
+                Global.listFraisMois.get(key).setEtape(this.qte);
+                break;
+
+            case "repas":
+                Global.listFraisMois.get(key).setRepas(this.qte);
+                break;
+
+            default:
+                Log.d("Erreur: ", "Type de frais manquant");
+        }
+    }
+
+    /**
+     * Sérialisation des données saisies
+     *
+     * @param context : le contexte actuel de l'application (ici une Activity de saisie
+     *                de frais forfaitisé)
+     */
+    public void serialize(Context context) {
+        Serializer.serialize(Global.listFraisMois, context);
+    }
 
     // -------- GETTERS & SETTERS --------
 

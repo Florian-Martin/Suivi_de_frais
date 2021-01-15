@@ -70,6 +70,7 @@ public class KmActivity extends AppCompatActivity {
 
 
     // -------- METHODES --------
+
     /**
      * Chargement des méthodes évènementielles appelées
      * lors d'interactions avec les composants de la vue.
@@ -83,21 +84,6 @@ public class KmActivity extends AppCompatActivity {
     }
 
     /**
-     * Enregistrement dans la zone de texte et dans la liste de la nouvelle qte, à la date choisie
-     */
-    private void enregNewQte() {
-        // enregistrement dans la zone de texte
-        ((EditText) findViewById(R.id.txtKm)).setText(String.format(Locale.FRANCE, "%d", controleur.getQte()));
-        // enregistrement dans la liste
-        Integer key = (controleur.getAnnee() * 100) + controleur.getMois();
-        if (!Global.listFraisMois.containsKey(key)) {
-            // creation du mois et de l'annee s'ils n'existent pas déjà
-            Global.listFraisMois.put(key, new FraisMois(controleur.getAnnee(), controleur.getMois()));
-        }
-        Global.listFraisMois.get(key).setKm(controleur.getQte());
-    }
-
-    /**
      * Retour à l'activité principale (le menu)
      */
     private void retourActivityPrincipale() {
@@ -107,17 +93,6 @@ public class KmActivity extends AppCompatActivity {
 
 
     // -------- EVENEMENTS --------
-    /**
-     * Sur le clic du bouton valider : sérialisation
-     */
-    private void cmdValider_clic() {
-        findViewById(R.id.cmdKmValider).setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                Serializer.serialize(Global.listFraisMois, KmActivity.this);
-                retourActivityPrincipale();
-            }
-        });
-    }
 
     /**
      * Sur le clic du bouton plus : ajout de 10 dans la quantité
@@ -126,7 +101,9 @@ public class KmActivity extends AppCompatActivity {
         findViewById(R.id.cmdKmPlus).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 controleur.majQte("plus");
-                enregNewQte();
+                // enregistrement dans la zone de texte
+                ((EditText) findViewById(R.id.txtKm)).setText(String.format(Locale.FRANCE, "%d",
+                        controleur.getQte()));
             }
         });
     }
@@ -138,7 +115,9 @@ public class KmActivity extends AppCompatActivity {
         findViewById(R.id.cmdKmMoins).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 controleur.majQte("moins");
-                enregNewQte();
+                // enregistrement dans la zone de texte
+                ((EditText) findViewById(R.id.txtKm)).setText(String.format(Locale.FRANCE, "%d",
+                        controleur.getQte()));
             }
         });
     }
@@ -168,4 +147,17 @@ public class KmActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Sur le clic du bouton valider : sérialisation
+     */
+    private void cmdValider_clic() {
+        findViewById(R.id.cmdKmValider).setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                controleur.serialize(KmActivity.this);
+                retourActivityPrincipale();
+            }
+        });
+    }
+
 }

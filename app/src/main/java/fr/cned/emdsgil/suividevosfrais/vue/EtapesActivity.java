@@ -63,18 +63,19 @@ public class EtapesActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getTitle().equals(getString(R.string.retour_accueil))) {
-            retourActivityPrincipale() ;
+            retourActivityPrincipale();
         }
         return super.onOptionsItemSelected(item);
     }
 
 
     // -------- METHODES --------
+
     /**
      * Chargement des méthodes évènementielles appelées
      * lors d'interactions avec les composants de la vue.
      */
-    public void onCreateListenersLoading(){
+    public void onCreateListenersLoading() {
         imgReturn_clic();
         cmdValider_clic();
         cmdPlus_clic();
@@ -83,44 +84,15 @@ public class EtapesActivity extends AppCompatActivity {
     }
 
     /**
-     * Enregistrement dans la zone de texte et dans la liste de la nouvelle qte, à la date choisie
-     */
-    private void enregNewQte() {
-        Integer annee = controleur.getAnnee();
-        Integer mois = controleur.getMois();
-
-        // enregistrement dans la zone de texte
-        ((EditText) findViewById(R.id.txtEtapes)).setText(String.format(Locale.FRANCE, "%d", controleur.getQte()));
-        // enregistrement dans la liste
-        Integer key = (annee * 100) + mois;
-        if (!Global.listFraisMois.containsKey(key)) {
-            // creation du mois et de l'annee s'ils n'existent pas déjà
-            Global.listFraisMois.put(key, new FraisMois(annee, mois));
-        }
-        Global.listFraisMois.get(key).setEtape(controleur.getQte());
-    }
-
-    /**
      * Retour à l'activité principale (le menu)
      */
     private void retourActivityPrincipale() {
-        Intent intent = new Intent(EtapesActivity.this, MainActivity.class) ;
-        startActivity(intent) ;
+        Intent intent = new Intent(EtapesActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
 
     // -------- EVENEMENTS --------
-    /**
-     * Sur le clic du bouton valider : sérialisation
-     */
-    private void cmdValider_clic() {
-        findViewById(R.id.cmdEtapesValider).setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                Serializer.serialize(Global.listFraisMois, EtapesActivity.this);
-                retourActivityPrincipale();
-            }
-        });
-    }
 
     /**
      * Sur le clic du bouton plus : ajout de 10 dans la quantité
@@ -129,7 +101,9 @@ public class EtapesActivity extends AppCompatActivity {
         findViewById(R.id.cmdEtapePlus).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 controleur.majQte("plus");
-                enregNewQte();
+                // enregistrement dans la zone de texte
+                ((EditText) findViewById(R.id.txtEtapes)).setText(String.format(Locale.FRANCE, "%d",
+                        controleur.getQte()));
             }
         });
     }
@@ -141,7 +115,9 @@ public class EtapesActivity extends AppCompatActivity {
         findViewById(R.id.cmdEtapeMoins).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 controleur.majQte("moins");
-                enregNewQte();
+                // enregistrement dans la zone de texte
+                ((EditText) findViewById(R.id.txtEtapes)).setText(String.format(Locale.FRANCE, "%d",
+                        controleur.getQte()));
             }
         });
     }
@@ -167,8 +143,20 @@ public class EtapesActivity extends AppCompatActivity {
     private void imgReturn_clic() {
         findViewById(R.id.imgEtapesReturn).setOnClickListener(new ImageView.OnClickListener() {
             public void onClick(View v) {
-                retourActivityPrincipale() ;
+                retourActivityPrincipale();
             }
-        }) ;
+        });
+    }
+
+    /**
+     * Sur le clic du bouton valider : sérialisation
+     */
+    private void cmdValider_clic() {
+        findViewById(R.id.cmdEtapesValider).setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                controleur.serialize(EtapesActivity.this);
+                retourActivityPrincipale();
+            }
+        });
     }
 }
