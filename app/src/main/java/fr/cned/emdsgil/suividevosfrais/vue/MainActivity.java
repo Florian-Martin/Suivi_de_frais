@@ -18,6 +18,7 @@ import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
 public class MainActivity extends AppCompatActivity {
 
+    // -------- CYCLE DE VIE --------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

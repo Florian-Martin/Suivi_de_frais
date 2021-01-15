@@ -25,11 +25,12 @@ import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 public class KmActivity extends AppCompatActivity {
 
     // -------- VARIABLES --------
-    private Integer qte;
     private Controleur controleur;
     private DatePicker datePicker;
-    private String typeFrais = "km";
+    private final String typeFrais = "km";
 
+
+    // -------- CYCLE DE VIE --------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +38,12 @@ public class KmActivity extends AppCompatActivity {
         setTitle("GSB : Frais kilométriques");
 
         controleur = Controleur.getControleur();
-        datePicker = ((DatePicker) findViewById(R.id.datKm));
+        datePicker = findViewById(R.id.datKm);
 
         // modification de l'affichage du DatePicker
         Outils.changeAfficheDate(datePicker, false);
 
-        // valorisation des propriétés
+        // valorisation de la quantité de frais saisis pour le mois sélectionné
         controleur.valoriseProprietes(datePicker, typeFrais);
         ((EditText) findViewById(R.id.txtKm)).setText(String.format(Locale.FRANCE, "%d",
                 controleur.getQte()));

@@ -17,9 +17,11 @@ public final class Controleur {
     // -------- VARIABLES --------
     private static Controleur controleur = null;
     private int qte, annee, mois;
+    private String typeFrais;
 
 
     // -------- CONSTRUCTEUR --------
+
     /**
      * Constructeur privé
      * Le but est d'interdire l'instanciation de la classe depuis l'extérieur.
@@ -30,6 +32,7 @@ public final class Controleur {
 
 
     // -------- METHODES --------
+
     /**
      * Fonction d'accès à l'unique instance de la classe
      *
@@ -47,13 +50,15 @@ public final class Controleur {
      * Valorisation des propriétés avec les informations affichées
      */
     public void valoriseProprietes(DatePicker datePicker, String typeFrais) {
-        annee = datePicker.getYear();
-        mois = datePicker.getMonth() + 1;
-        // récupération de la qte correspondant au mois actuel
+        this.annee = datePicker.getYear();
+        this.mois = datePicker.getMonth() + 1;
+        this.typeFrais = typeFrais;
         this.qte = 0;
         Integer key = (annee * 100) + mois;
+
+        // récupération de la quantité correspondant au mois sélectionné (actuel par défaut)
         if (Global.listFraisMois.containsKey(key)) {
-            switch (typeFrais) {
+            switch (this.typeFrais) {
                 case "km":
                     this.qte = Global.listFraisMois.get(key).getKm();
                     break;
@@ -79,15 +84,27 @@ public final class Controleur {
     /**
      * Mise à jour de la quantité du frais saisie
      * Mise à jour de l'editText en fonction du bouton cliaué ("plus" ou "moins")
+     *
      * @param plusMoins Sa valeur dépend du bouton cliqué ("plus" ou "moins")
      */
-    public void majQte(String plusMoins){
-        if (plusMoins == "plus"){
-            this.qte += 10;
-        }
-        else{
-            if (plusMoins == "moins"){
-                this.qte = Math.max(0, this.qte - 10); // suppression de 10 si possible
+    public void majQte(String plusMoins) {
+        if (this.typeFrais != "") {
+            if (this.typeFrais == "etapes" || this.typeFrais == "nuitees" || this.typeFrais == "repas") {
+                if (plusMoins == "plus") {
+                    this.qte += 1;
+                } else {
+                    if (plusMoins == "moins") {
+                        this.qte = Math.max(0, this.qte - 1); // soustraction de 1 si qte >= 1
+                    }
+                }
+            } else {
+                if (plusMoins == "plus") {
+                    this.qte += 10;
+                } else {
+                    if (plusMoins == "moins") {
+                        this.qte = Math.max(0, this.qte - 10); // soustraction de 10 si qte >= 1
+                    }
+                }
             }
         }
     }

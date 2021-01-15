@@ -26,6 +26,7 @@ public class RepasActivity extends AppCompatActivity {
     private Integer qte ;
 
 
+    // -------- CYCLE DE VIE --------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

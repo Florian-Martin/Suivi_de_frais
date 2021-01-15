@@ -20,6 +20,7 @@ import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
 public class HfActivity extends AppCompatActivity {
 
+	// -------- CYCLE DE VIE --------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

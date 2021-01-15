@@ -22,6 +22,7 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 public class HfRecapActivity extends AppCompatActivity {
 
+	// -------- CYCLE DE VIE --------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
