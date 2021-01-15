@@ -23,9 +23,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("GSB : Suivi des frais");
-        // récupération des informations sérialisées
+
+        // Récupération des informations sérialisées
         recupSerialize();
-        // chargement des méthodes événementielles
+
+        // Chargement des méthodes événementielles
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class);
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class);
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHfRecap)), HfRecapActivity.class);
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdRepas)), RepasActivity.class);
         cmdMenu_clic(((ImageButton) findViewById(R.id.cmdEtape)), EtapesActivity.class);
 
+        // Transfert des données enregistrées localement vers la base distante
         cmdTransfert_clic();
     }
 
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+    // -------- METHODES --------
     /**
      * Récupère la sérialisation si elle existe
      */
@@ -73,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    // -------- EVENEMENTS --------
     /**
      * Sur la sélection d'un bouton dans l'activité principale ouverture de l'activité correspondante
      */

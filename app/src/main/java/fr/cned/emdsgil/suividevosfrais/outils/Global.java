@@ -7,6 +7,7 @@ import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
 
 public abstract class Global {
 
+    // -------- METHODES --------
     // tableau d'informations mémorisées
     public static Hashtable<Integer, FraisMois> listFraisMois = new Hashtable<>();
     /* Retrait du type de l'Hashtable (Optimisation Android Studio)

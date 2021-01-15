@@ -14,9 +14,12 @@ import fr.cned.emdsgil.suividevosfrais.R;
 
 public class FraisHfAdapter extends BaseAdapter {
 
+	// -------- VARIABLES --------
 	private final ArrayList<FraisHf> lesFrais ; // liste des frais du mois
 	private final LayoutInflater inflater ;
 
+
+	// -------- CONSTRUCTEUR --------
     /**
 	 * Constructeur de l'adapter pour valoriser les propriétés
      * @param context Accès au contexte de l'application
@@ -26,7 +29,9 @@ public class FraisHfAdapter extends BaseAdapter {
 		inflater = LayoutInflater.from(context) ;
 		this.lesFrais = lesFrais ;
     }
-	
+
+
+	// -------- METHODES --------
 	/**
 	 * retourne le nombre d'éléments de la listview
 	 */
@@ -51,8 +56,9 @@ public class FraisHfAdapter extends BaseAdapter {
 		return index;
 	}
 
+
 	/**
-	 * structure contenant les éléments d'une ligne
+	 * Structure contenant les éléments d'une ligne
 	 */
 	private class ViewHolder {
 		TextView txtListJour ;

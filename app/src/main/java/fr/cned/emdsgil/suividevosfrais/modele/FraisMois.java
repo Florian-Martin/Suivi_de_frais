@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class FraisMois implements Serializable {
 
+    // -------- VARIABLES --------
     private Integer mois; // mois concerné
     private Integer annee; // année concernée
     private Integer etape; // nombre d'étapes du mois
@@ -16,6 +17,8 @@ public class FraisMois implements Serializable {
     private Integer repas; // nombre de repas du mois
     private final ArrayList<FraisHf> lesFraisHf; // liste des frais hors forfait du mois
 
+
+    // -------- CONSTRUCTEUR --------
     public FraisMois(Integer annee, Integer mois) {
         this.annee = annee;
         this.mois = mois;
@@ -30,6 +33,8 @@ public class FraisMois implements Serializable {
 		*/
     }
 
+
+    // -------- METHODES --------
     /**
      * Ajout d'un frais hors forfait
      *
@@ -49,6 +54,8 @@ public class FraisMois implements Serializable {
         lesFraisHf.remove(index);
     }
 
+
+    // -------- GETTERS & SETTERS --------
     public Integer getMois() {
         return mois;
     }

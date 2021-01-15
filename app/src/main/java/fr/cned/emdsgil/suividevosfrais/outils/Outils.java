@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
  */
 public class Outils {
 
+    // -------- METHODES --------
     /**
      * Modification de l'affichage de la date (juste le mois et l'année, sans le jour)
      */

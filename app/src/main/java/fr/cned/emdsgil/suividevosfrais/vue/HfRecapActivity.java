@@ -52,6 +52,8 @@ public class HfRecapActivity extends AppCompatActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+
+	// -------- METHODES --------
 	/**
 	 * Affiche la liste des frais hors forfaits de la date sélectionnée
 	 */
@@ -75,7 +77,17 @@ public class HfRecapActivity extends AppCompatActivity {
 		FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, liste) ;
 		listView.setAdapter(adapter) ;
 	}
-	
+
+	/**
+	 * Retour à l'activité principale (le menu)
+	 */
+	private void retourActivityPrincipale() {
+		Intent intent = new Intent(HfRecapActivity.this, MainActivity.class) ;
+		startActivity(intent) ;
+	}
+
+
+	// -------- EVENEMENTS --------
 	/**
 	 * Sur la selection de l'image : retour au menu principal
 	 */
@@ -99,14 +111,4 @@ public class HfRecapActivity extends AppCompatActivity {
 			}
     	});       	
     }
-    
-    
-
-	/**
-	 * Retour à l'activité principale (le menu)
-	 */
-	private void retourActivityPrincipale() {
-		Intent intent = new Intent(HfRecapActivity.this, MainActivity.class) ;
-		startActivity(intent) ;   					
-	}
 }

@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
  */
 public abstract class Serializer {
 
+	// -------- METHODES --------
 	/**
 	 * Sérialisation d'un objet
 	 * @param object Objet à sérialiser

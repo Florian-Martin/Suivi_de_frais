@@ -20,10 +20,11 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 public class EtapesActivity extends AppCompatActivity {
 
-    // informations affichées dans l'activité
+    // -------- VARIABLES --------
     private Integer annee ;
     private Integer mois ;
     private Integer qte ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,8 @@ public class EtapesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    // -------- METHODES --------
     /**
      * Chargement des méthodes évènementielles appelées
      * lors d'interactions avec les composants de la vue.
@@ -85,6 +88,8 @@ public class EtapesActivity extends AppCompatActivity {
         ((EditText)findViewById(R.id.txtEtapes)).setText(String.format(Locale.FRANCE, "%d", qte)) ;
     }
 
+
+    // -------- EVENEMENTS --------
     /**
      * Sur la selection de l'image : retour au menu principal
      */

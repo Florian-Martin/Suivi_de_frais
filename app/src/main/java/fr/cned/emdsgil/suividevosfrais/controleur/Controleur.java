@@ -14,9 +14,12 @@ import fr.cned.emdsgil.suividevosfrais.outils.Global;
  */
 public final class Controleur {
 
+    // -------- VARIABLES --------
     private static Controleur controleur = null;
     private int qte, annee, mois;
 
+
+    // -------- CONSTRUCTEUR --------
     /**
      * Constructeur privé
      * Le but est d'interdire l'instanciation de la classe depuis l'extérieur.
@@ -25,6 +28,8 @@ public final class Controleur {
         super();
     }
 
+
+    // -------- METHODES --------
     /**
      * Fonction d'accès à l'unique instance de la classe
      *
@@ -71,7 +76,6 @@ public final class Controleur {
         }
     }
 
-
     /**
      * Mise à jour de la quantité du frais saisie
      * Mise à jour de l'editText en fonction du bouton cliaué ("plus" ou "moins")
@@ -89,7 +93,7 @@ public final class Controleur {
     }
 
 
-    /********* GETTERS & SETTERS *********/
+    // -------- GETTERS & SETTERS --------
 
     public int getQte() {
         return qte;

@@ -50,6 +50,8 @@ public class HfActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+	// -------- METHODES --------
 	/**
 	 * Sur la selection de l'image : retour au menu principal
 	 */
@@ -61,19 +63,6 @@ public class HfActivity extends AppCompatActivity {
     	}) ;
     }
 
-    /**
-     * Sur le clic du bouton ajouter : enregistrement dans la liste et sérialisation
-     */
-    private void cmdAjouter_clic() {
-    	findViewById(R.id.cmdHfAjouter).setOnClickListener(new Button.OnClickListener() {
-    		public void onClick(View v) {
-    			enregListe() ;
-    			Serializer.serialize(Global.listFraisMois, HfActivity.this) ;
-    			retourActivityPrincipale() ;    		
-    		}
-    	}) ;    	
-    }
-    
 	/**
 	 * Enregistrement dans la liste du nouveau frais hors forfait
 	 */
@@ -90,7 +79,7 @@ public class HfActivity extends AppCompatActivity {
 			// creation du mois et de l'annee s'ils n'existent pas déjà
 			Global.listFraisMois.put(key, new FraisMois(annee, mois)) ;
 		}
-		Global.listFraisMois.get(key).addFraisHf(montant, motif, jour) ;		
+		Global.listFraisMois.get(key).addFraisHf(montant, motif, jour) ;
 	}
 
 	/**
@@ -98,6 +87,21 @@ public class HfActivity extends AppCompatActivity {
 	 */
 	private void retourActivityPrincipale() {
 		Intent intent = new Intent(HfActivity.this, MainActivity.class) ;
-		startActivity(intent) ;   					
+		startActivity(intent) ;
 	}
+
+
+	// -------- EVENEMENTS --------
+    /**
+     * Sur le clic du bouton ajouter : enregistrement dans la liste et sérialisation
+     */
+    private void cmdAjouter_clic() {
+    	findViewById(R.id.cmdHfAjouter).setOnClickListener(new Button.OnClickListener() {
+    		public void onClick(View v) {
+    			enregListe() ;
+    			Serializer.serialize(Global.listFraisMois, HfActivity.this) ;
+    			retourActivityPrincipale() ;    		
+    		}
+    	}) ;    	
+    }
 }
