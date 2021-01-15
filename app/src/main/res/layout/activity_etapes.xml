@@ -96,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:width="100dp"
+                android:focusable="false"
                 android:gravity="end|center_vertical"
                 android:inputType="number">
 
