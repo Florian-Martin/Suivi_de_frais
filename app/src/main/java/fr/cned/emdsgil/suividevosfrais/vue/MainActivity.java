@@ -9,22 +9,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import java.util.Hashtable;
 
-import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
+import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
 import fr.cned.emdsgil.suividevosfrais.R;
-import fr.cned.emdsgil.suividevosfrais.outils.Global;
-import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
+
 
 /**
  * Classe de présentation de l'activity de démarrage de l'application
- *
+ * <p>
  * Date : 2021
  *
  * @author emdsgil
  * @author fmart
  */
 public class MainActivity extends AppCompatActivity {
+
+    // -------- VARIABLES --------
+    private Controleur controleur;
+
 
     // -------- CYCLE DE VIE --------
     @Override
@@ -34,15 +36,11 @@ public class MainActivity extends AppCompatActivity {
         setTitle("GSB : Suivi des frais");
 
         // Récupération des informations sérialisées
-        recupSerialize();
+        controleur = Controleur.getControleur();
+        controleur.recupSerialize(MainActivity.this);
 
         // Chargement des méthodes événementielles
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHfRecap)), HfRecapActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdNuitee)), NuiteesActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdRepas)), RepasActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdEtape)), EtapesActivity.class);
+        onCreateListenersLoading();
 
         // Transfert des données enregistrées localement vers la base distante
         cmdTransfert_clic();
@@ -58,37 +56,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     // -------- METHODES --------
-    /**
-     * Récupère la sérialisation si elle existe
-     */
-    private void recupSerialize() {
-        /* Pour éviter le warning "Unchecked cast from Object to Hash" produit par un casting direct :
-         * Global.listFraisMois = (Hashtable<Integer, FraisMois>) Serializer.deSerialize(Global.filename, MainActivity.this);
-         * On créé un Hashtable générique <?,?> dans lequel on récupère l'Object retourné par la méthode deSerialize, puis
-         * on cast chaque valeur dans le type attendu.
-         * Seulement ensuite on affecte cet Hastable à Global.listFraisMois.
-        */
-        Hashtable<?, ?> monHash = (Hashtable<?, ?>) Serializer.deSerialize(MainActivity.this);
-        if (monHash != null) {
-            Hashtable<Integer, FraisMois> monHashCast = new Hashtable<>();
-            for (Hashtable.Entry<?, ?> entry : monHash.entrySet()) {
-                monHashCast.put((Integer) entry.getKey(), (FraisMois) entry.getValue());
-            }
-            Global.listFraisMois = monHashCast;
-        }
-        // si rien n'a été récupéré, il faut créer la liste
-        if (Global.listFraisMois == null) {
-            Global.listFraisMois = new Hashtable<>();
-            /* Retrait du type de l'HashTable (Optimisation Android Studio)
-			 * Original : Typage explicit =
-			 * Global.listFraisMois = new Hashtable<Integer, FraisMois>();
-			*/
 
-        }
+    /**
+     * Chargement des méthodes évènementielles appelées
+     * lors d'interactions avec les composants de la vue.
+     */
+    private void onCreateListenersLoading() {
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHfRecap)), HfRecapActivity.class);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdNuitee)), NuiteesActivity.class);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdRepas)), RepasActivity.class);
+        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdEtape)), EtapesActivity.class);
     }
 
 
     // -------- EVENEMENTS --------
+
     /**
      * Sur la sélection d'un bouton dans l'activité principale ouverture de l'activité correspondante
      */

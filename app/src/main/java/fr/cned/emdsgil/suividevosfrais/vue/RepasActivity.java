@@ -21,7 +21,7 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 /**
  * Classe de présentation de la saisie de frais forfaitisés de repas
- *
+ * <p>
  * Date : 2021
  *
  * @author emdsgil
@@ -100,7 +100,7 @@ public class RepasActivity extends AppCompatActivity {
     // -------- EVENEMENTS --------
 
     /**
-     * Sur le clic du bouton plus : ajout de 10 dans la quantité
+     * Sur le clic du bouton plus : ajout de 1 dans la quantité
      */
     private void cmdPlus_clic() {
         findViewById(R.id.cmdRepasPlus).setOnClickListener(new Button.OnClickListener() {
@@ -114,7 +114,7 @@ public class RepasActivity extends AppCompatActivity {
     }
 
     /**
-     * Sur le clic du bouton moins : soustrait 10 à la quantité si elle est >= 10
+     * Sur le clic du bouton moins : soustrait 1 à la quantité si elle est >= 1
      */
     private void cmdMoins_clic() {
         findViewById(R.id.cmdRepasMoins).setOnClickListener(new Button.OnClickListener() {

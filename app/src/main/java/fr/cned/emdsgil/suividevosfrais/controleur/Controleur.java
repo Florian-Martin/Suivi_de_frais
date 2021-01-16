@@ -4,25 +4,31 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.DatePicker;
 
+import java.util.Hashtable;
+
 import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
+import fr.cned.emdsgil.suividevosfrais.vue.MainActivity;
 
 /**
  * Classe gérant la partie contrôle du modèle MVC
  * Cette classe permet de gérer les modifications et la persistance des données
  * suites aux interactions des utilisateurs sur les vues
- *
+ * <p>
  * Date : 2021
  *
  * @author fmart
+ * @author emdsgil
  */
 public final class Controleur {
 
     // -------- VARIABLES --------
     private static Controleur controleur = null;
-    private int qte, annee, mois;
-    private String typeFrais;
+    private int qte, annee, mois, jour, key;
+    private String typeFrais, motif;
+    private Float montant;
+    private FraisMois fraisMois;
 
 
     // -------- CONSTRUCTEUR --------
@@ -52,6 +58,34 @@ public final class Controleur {
     }
 
     /**
+     * Récupère la sérialisation si elle existe
+     */
+    public void recupSerialize(Context context) {
+        /* Pour éviter le warning "Unchecked cast from Object to Hash" produit par un casting direct :
+         * Global.listFraisMois = (Hashtable<Integer, FraisMois>) Serializer.deSerialize(Global.filename, MainActivity.this);
+         * On créé un Hashtable générique <?,?> dans lequel on récupère l'Object retourné par la méthode deSerialize, puis
+         * on cast chaque valeur dans le type attendu.
+         * Seulement ensuite on affecte cet Hastable à Global.listFraisMois.
+         */
+        Hashtable<?, ?> monHash = (Hashtable<?, ?>) Serializer.deSerialize(context);
+        if (monHash != null) {
+            Hashtable<Integer, FraisMois> monHashCast = new Hashtable<>();
+            for (Hashtable.Entry<?, ?> entry : monHash.entrySet()) {
+                monHashCast.put((Integer) entry.getKey(), (FraisMois) entry.getValue());
+            }
+            Global.listFraisMois = monHashCast;
+        }
+        // si rien n'a été récupéré, il faut créer la liste
+        if (Global.listFraisMois == null) {
+            Global.listFraisMois = new Hashtable<>();
+            /* Retrait du type de l'HashTable (Optimisation Android Studio)
+             * Original : Typage explicit =
+             * Global.listFraisMois = new Hashtable<Integer, FraisMois>();
+             */
+        }
+    }
+
+    /**
      * Valorisation des propriétés avec les informations affichées
      */
     public void valoriseProprietes(DatePicker datePicker, String typeFrais) {
@@ -59,25 +93,27 @@ public final class Controleur {
         this.mois = datePicker.getMonth() + 1;
         this.typeFrais = typeFrais;
         this.qte = 0;
-        Integer key = (annee * 100) + mois;
+        this.key = (this.annee * 100) + this.mois;
 
         // récupération de la quantité correspondant au mois sélectionné (actuel par défaut)
         if (Global.listFraisMois.containsKey(key)) {
+            this.fraisMois = Global.listFraisMois.get(key);
+
             switch (this.typeFrais) {
                 case "km":
-                    this.qte = Global.listFraisMois.get(key).getKm();
+                    this.qte = fraisMois.getKm();
                     break;
 
                 case "nuitees":
-                    this.qte = Global.listFraisMois.get(key).getNuitee();
+                    this.qte = fraisMois.getNuitee();
                     break;
 
                 case "etapes":
-                    this.qte = Global.listFraisMois.get(key).getEtape();
+                    this.qte = fraisMois.getEtape();
                     break;
 
                 case "repas":
-                    this.qte = Global.listFraisMois.get(key).getRepas();
+                    this.qte = fraisMois.getRepas();
                     break;
 
                 default:
@@ -118,32 +154,35 @@ public final class Controleur {
     /**
      * Enregistrement dans la zone de texte et dans la liste de la nouvelle quantité, à la date choisie
      */
-    private void enregNewQte() {
+    public void enregNewQte() {
         // enregistrement dans la liste
-        Integer key = (this.annee * 100) + this.mois;
         if (!Global.listFraisMois.containsKey(key)) {
             // creation du mois et de l'annee s'ils n'existent pas déjà
             Global.listFraisMois.put(key, new FraisMois(this.annee, this.mois));
+            this.fraisMois = Global.listFraisMois.get(this.key);
         }
         switch (this.typeFrais) {
             case "km":
-                Global.listFraisMois.get(key).setKm(this.qte);
+                fraisMois.setKm(this.qte);
                 break;
 
             case "nuitees":
-                Global.listFraisMois.get(key).setNuitee(this.qte);
+                fraisMois.setNuitee(this.qte);
                 break;
 
             case "etapes":
-                Global.listFraisMois.get(key).setEtape(this.qte);
+                fraisMois.setEtape(this.qte);
                 break;
 
             case "repas":
-                Global.listFraisMois.get(key).setRepas(this.qte);
+                fraisMois.setRepas(this.qte);
                 break;
 
+            case "hf":
+                fraisMois.addFraisHf(montant, motif, jour);
+
             default:
-                Log.d("Erreur: ", "Type de frais manquant");
+                Log.d("ERREUR: ", "Type de frais inconnu");
         }
     }
 
@@ -157,29 +196,34 @@ public final class Controleur {
         Serializer.serialize(Global.listFraisMois, context);
     }
 
+
     // -------- GETTERS & SETTERS --------
 
     public int getQte() {
         return qte;
     }
 
-    public void setQte(int qte) {
-        this.qte += qte;
-    }
-
-    public int getAnnee() {
-        return annee;
+    public void setTypeFrais(String typeFrais) {
+        this.typeFrais = typeFrais;
     }
 
     public void setAnnee(int annee) {
         this.annee = annee;
     }
 
-    public int getMois() {
-        return mois;
-    }
-
     public void setMois(int mois) {
         this.mois = mois;
+    }
+
+    public void setJour(int jour) {
+        this.jour = jour;
+    }
+
+    public void setMotif(String motif) {
+        this.motif = motif;
+    }
+
+    public void setMontant(Float montant) {
+        this.montant = montant;
     }
 }

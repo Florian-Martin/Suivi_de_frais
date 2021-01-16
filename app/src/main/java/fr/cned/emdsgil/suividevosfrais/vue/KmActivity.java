@@ -21,7 +21,7 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 /**
  * Classe de présentation de la saisie de frais forfaitisés kilométriques
- *
+ * <p>
  * Date : 2021
  *
  * @author emdsgil
@@ -164,5 +164,4 @@ public class KmActivity extends AppCompatActivity {
             }
         });
     }
-
 }
