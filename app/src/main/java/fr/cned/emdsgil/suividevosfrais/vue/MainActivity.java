@@ -16,6 +16,14 @@ import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
+/**
+ * Classe de présentation de l'activity de démarrage de l'application
+ *
+ * Date : 2021
+ *
+ * @author emdsgil
+ * @author fmart
+ */
 public class MainActivity extends AppCompatActivity {
 
     // -------- CYCLE DE VIE --------

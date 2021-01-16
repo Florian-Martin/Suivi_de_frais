@@ -18,6 +18,14 @@ import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
+/**
+ * Classe de présentation de la saisie de frais hors forfait
+ *
+ * Date : 2021
+ *
+ * @author emdsgil
+ * @author fmart
+ */
 public class HfActivity extends AppCompatActivity {
 
 	// -------- CYCLE DE VIE --------

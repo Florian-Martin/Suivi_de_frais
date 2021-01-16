@@ -16,12 +16,17 @@ import android.widget.ImageView;
 import java.util.Locale;
 
 import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
-import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
 import fr.cned.emdsgil.suividevosfrais.R;
-import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Outils;
-import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
+/**
+ * Classe de présentation de la saisie de frais forfaitisés kilométriques
+ *
+ * Date : 2021
+ *
+ * @author emdsgil
+ * @author fmart
+ */
 public class KmActivity extends AppCompatActivity {
 
     // -------- VARIABLES --------

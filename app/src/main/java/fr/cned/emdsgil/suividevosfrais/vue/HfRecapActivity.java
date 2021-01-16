@@ -20,6 +20,14 @@ import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
+/**
+ * Classe de présentation de la récapitulation de frais hors forfait
+ *
+ * Date : 2021
+ *
+ * @author emdsgil
+ * @author fmart
+ */
 public class HfRecapActivity extends AppCompatActivity {
 
 	// -------- CYCLE DE VIE --------

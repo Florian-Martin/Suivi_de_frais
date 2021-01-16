@@ -10,8 +10,10 @@ import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
 /**
  * Classe gérant la partie contrôle du modèle MVC
- * Cette classe permet de gérer la modifications et la persistance des données
+ * Cette classe permet de gérer les modifications et la persistance des données
  * suites aux interactions des utilisateurs sur les vues
+ *
+ * Date : 2021
  *
  * @author fmart
  */
