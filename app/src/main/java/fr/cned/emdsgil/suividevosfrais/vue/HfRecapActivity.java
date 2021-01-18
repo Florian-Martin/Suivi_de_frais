@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHfAdapter;
 import fr.cned.emdsgil.suividevosfrais.R;
@@ -30,19 +31,30 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
  */
 public class HfRecapActivity extends AppCompatActivity {
 
+    // -------- VARIABLES --------
+    private Controleur controleur;
+    private DatePicker datePicker;
+    private ListView listView;
+
+
     // -------- CYCLE DE VIE --------
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hf_recap);
         setTitle("GSB : Récap Frais HF");
+        datePicker = findViewById(R.id.datHfRecap);
+        controleur = Controleur.getControleur();
+        listView = findViewById(R.id.lstHfRecap);
+
         // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate((DatePicker) findViewById(R.id.datHfRecap), false);
+        Outils.changeAfficheDate(datePicker, false);
+
         // valorisation des propriétés
         afficheListe();
-        // chargement des méthodes événementielles
-        imgReturn_clic();
-        dat_clic();
+
+        // chargement des méthodes évènementielles
+        onCreateListenersLoading();
     }
 
     @Override
@@ -65,25 +77,20 @@ public class HfRecapActivity extends AppCompatActivity {
     // -------- METHODES --------
 
     /**
-     * Affiche la liste des frais hors forfaits de la date sélectionnée
+     * Chargement des méthodes évènementielles appelées
+     * lors d'interactions avec les composants de la vue.
      */
-    private void afficheListe() {
-        Integer annee = ((DatePicker) findViewById(R.id.datHfRecap)).getYear();
-        Integer mois = ((DatePicker) findViewById(R.id.datHfRecap)).getMonth() + 1;
-        // récupération des frais HF pour cette date
-        Integer key = annee * 100 + mois;
-        ArrayList<FraisHf> liste;
-        if (Global.listFraisMois.containsKey(key)) {
-            liste = Global.listFraisMois.get(key).getLesFraisHf();
-        } else {
-            liste = new ArrayList<>();
-            /* Retrait du type de l'ArrayList (Optimisation Android Studio)
-             * Original : Typage explicit =
-             * liste = new ArrayList<FraisHf>() ;
-             */
-            // insertion dans la listview
-        }
-        ListView listView = (ListView) findViewById(R.id.lstHfRecap);
+    public void onCreateListenersLoading() {
+        imgReturn_clic();
+        dat_clic();
+    }
+
+    /**
+     * Affiche la liste des frais hors forfait de la date sélectionnée
+     */
+    public void afficheListe() {
+        controleur.valoriseProprietes(datePicker, "recupFraisHf");
+        ArrayList<FraisHf> liste = controleur.getLesFraisHf();
         FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, liste);
         listView.setAdapter(adapter);
     }
@@ -115,7 +122,7 @@ public class HfRecapActivity extends AppCompatActivity {
      */
     private void dat_clic() {
         final DatePicker uneDate = (DatePicker) findViewById(R.id.datHfRecap);
-        uneDate.init(uneDate.getYear(), uneDate.getMonth(), uneDate.getDayOfMonth(), new OnDateChangedListener() {
+        datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), new OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 afficheListe();

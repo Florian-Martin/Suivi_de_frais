@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  * @author fmart
  *
  */
-public class Outils {
+public abstract class Outils {
 
     // -------- METHODES --------
     /**

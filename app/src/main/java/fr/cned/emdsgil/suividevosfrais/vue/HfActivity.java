@@ -32,7 +32,9 @@ public class HfActivity extends AppCompatActivity {
     // -------- VARIABLES --------
     private Controleur controleur;
     private DatePicker datePicker;
+    private EditText editText;
     private final String typeFrais = "hf";
+
 
     // -------- CYCLE DE VIE --------
     @Override
@@ -41,17 +43,17 @@ public class HfActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hf);
         setTitle("GSB : Frais HF");
         controleur = Controleur.getControleur();
-        datePicker = (DatePicker) findViewById(R.id.datHf);
+        datePicker = findViewById(R.id.datHf);
+        editText = findViewById(R.id.txtHf);
 
         // modification de l'affichage du DatePicker
         Outils.changeAfficheDate(datePicker, true);
 
         // mise à 0 du montant
-        ((EditText) findViewById(R.id.txtHf)).setText("0");
+        editText.setText("0");
 
-        // chargement des méthodes événementielles
-        imgReturn_clic();
-        cmdAjouter_clic();
+        // chargement des méthodes évènementielles
+        onCreateListenersLoading();
     }
 
     @Override
@@ -74,6 +76,15 @@ public class HfActivity extends AppCompatActivity {
     // -------- METHODES --------
 
     /**
+     * Chargement des méthodes évènementielles appelées
+     * lors d'interactions avec les composants de la vue.
+     */
+    private void onCreateListenersLoading() {
+        imgReturn_clic();
+        cmdAjouter_clic();
+    }
+
+    /**
      * Enregistrement du nouveau frais hors forfait
      * Récupération des informations saisies puis enregistrement dans la liste
      */
@@ -81,7 +92,7 @@ public class HfActivity extends AppCompatActivity {
         controleur.setJour(datePicker.getDayOfMonth());
         controleur.valoriseProprietes(datePicker, typeFrais);
         controleur.setMotif(((EditText) findViewById(R.id.txtHfMotif)).getText().toString());
-        controleur.setMontant(Float.valueOf((((EditText) findViewById(R.id.txtHf)).getText().toString())));
+        controleur.setMontant(Float.valueOf(editText.getText().toString()));
         controleur.enregNewQte();
     }
 
@@ -97,7 +108,10 @@ public class HfActivity extends AppCompatActivity {
     // -------- EVENEMENTS --------
 
     /**
-     * Sur le clic du bouton ajouter : enregistrement dans la liste et sérialisation
+     * Sur le clic du bouton ajouter :
+     * enregistrement dans la liste
+     * sérialisation
+     * retour au menu principal
      */
     private void cmdAjouter_clic() {
         findViewById(R.id.cmdHfAjouter).setOnClickListener(new Button.OnClickListener() {

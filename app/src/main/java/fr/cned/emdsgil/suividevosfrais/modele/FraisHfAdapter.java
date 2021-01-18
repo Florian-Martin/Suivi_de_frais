@@ -69,16 +69,6 @@ public class FraisHfAdapter extends BaseAdapter {
         return index;
     }
 
-
-    /**
-     * Structure contenant les éléments d'une ligne
-     */
-    private class ViewHolder {
-        TextView txtListJour;
-        TextView txtListMontant;
-        TextView txtListMotif;
-    }
-
     /**
      * Affichage dans la liste
      */
@@ -99,6 +89,16 @@ public class FraisHfAdapter extends BaseAdapter {
         holder.txtListMontant.setText(String.format(Locale.FRANCE, "%.2f", lesFrais.get(index).getMontant()));
         holder.txtListMotif.setText(lesFrais.get(index).getMotif());
         return convertView;
+    }
+
+
+    /**
+     * Structure contenant les éléments d'une ligne
+     */
+    private class ViewHolder {
+        TextView txtListJour;
+        TextView txtListMontant;
+        TextView txtListMotif;
     }
 
 }

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.DatePicker;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
+import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
 import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
@@ -29,6 +31,7 @@ public final class Controleur {
     private String typeFrais, motif;
     private Float montant;
     private FraisMois fraisMois;
+    private ArrayList<FraisHf> lesFraisHf;
 
 
     // -------- CONSTRUCTEUR --------
@@ -46,9 +49,9 @@ public final class Controleur {
 
     /**
      * Fonction d'accès à l'unique instance de la classe
-     *
-     * @return Controleur.controleur
      * Retourne, ou créée si elle n'existe pas encore, l'unique instance de la classe
+     *
+     * @return Controleur.controleur soit l'unique instance possible de la classe
      */
     public final static Controleur getControleur() {
         if (Controleur.controleur == null) {
@@ -79,7 +82,7 @@ public final class Controleur {
         if (Global.listFraisMois == null) {
             Global.listFraisMois = new Hashtable<>();
             /* Retrait du type de l'HashTable (Optimisation Android Studio)
-             * Original : Typage explicit =
+             * Original : Typage explicite =
              * Global.listFraisMois = new Hashtable<Integer, FraisMois>();
              */
         }
@@ -116,15 +119,20 @@ public final class Controleur {
                     this.qte = fraisMois.getRepas();
                     break;
 
+                case "recupFraisHf":
+                    this.lesFraisHf = fraisMois.getLesFraisHf();
+
                 default:
                     Log.d("Erreur: ", "Type de frais manquant");
             }
+        } else if (typeFrais == "recupFraisHf") {
+            lesFraisHf = new ArrayList<>();
         }
     }
 
     /**
-     * Mise à jour de la quantité du frais saisie
-     * Mise à jour de l'editText en fonction du bouton cliaué ("plus" ou "moins")
+     * Mise à jour de la quantité du frais saisi
+     * Mise à jour de l'editText en fonction du bouton cliqué ("plus" ou "moins")
      *
      * @param plusMoins Sa valeur dépend du bouton cliqué ("plus" ou "moins")
      */
@@ -133,18 +141,14 @@ public final class Controleur {
             if (this.typeFrais == "etapes" || this.typeFrais == "nuitees" || this.typeFrais == "repas") {
                 if (plusMoins == "plus") {
                     this.qte += 1;
-                } else {
-                    if (plusMoins == "moins") {
-                        this.qte = Math.max(0, this.qte - 1); // soustraction de 1 si qte >= 1
-                    }
+                } else if (plusMoins == "moins") {
+                    this.qte = Math.max(0, this.qte - 1); // soustraction de 1 si qte >= 1
                 }
             } else {
                 if (plusMoins == "plus") {
                     this.qte += 10;
-                } else {
-                    if (plusMoins == "moins") {
-                        this.qte = Math.max(0, this.qte - 10); // soustraction de 10 si qte >= 1
-                    }
+                } else if (plusMoins == "moins") {
+                    this.qte = Math.max(0, this.qte - 10); // soustraction de 10 si qte >= 1
                 }
             }
         }
@@ -225,5 +229,9 @@ public final class Controleur {
 
     public void setMontant(Float montant) {
         this.montant = montant;
+    }
+
+    public ArrayList<FraisHf> getLesFraisHf() {
+        return lesFraisHf;
     }
 }

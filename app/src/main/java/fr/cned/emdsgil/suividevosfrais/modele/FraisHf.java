@@ -16,6 +16,13 @@ public class FraisHf  implements Serializable {
 
 
 	// -------- CONSTRUCTEUR --------
+
+	/**
+	 * Constructeur
+	 * @param montant le montant du frais hors forfait saisi
+	 * @param motif le motif du frais hors forfait saisi
+	 * @param jour le jour du frais hors forfait saisi
+	 */
 	public FraisHf(Float montant, String motif, Integer jour) {
 		this.montant = montant ;
 		this.motif = motif ;
