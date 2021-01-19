@@ -66,34 +66,6 @@ public final class Controleur {
     }
 
     /**
-     * Récupère la sérialisation si elle existe
-     */
-    public void recupSerialize(Context context) {
-        /* Pour éviter le warning "Unchecked cast from Object to Hash" produit par un casting direct :
-         * Global.listFraisMois = (Hashtable<Integer, FraisMois>) Serializer.deSerialize(Global.filename, MainActivity.this);
-         * On créé un Hashtable générique <?,?> dans lequel on récupère l'Object retourné par la méthode deSerialize, puis
-         * on cast chaque valeur dans le type attendu.
-         * Seulement ensuite on affecte cet Hastable à Global.listFraisMois.
-         */
-        Hashtable<?, ?> monHash = (Hashtable<?, ?>) Serializer.deSerialize(context);
-        if (monHash != null) {
-            Hashtable<Integer, FraisMois> monHashCast = new Hashtable<>();
-            for (Hashtable.Entry<?, ?> entry : monHash.entrySet()) {
-                monHashCast.put((Integer) entry.getKey(), (FraisMois) entry.getValue());
-            }
-            listFraisMois = monHashCast;
-        }
-        // si rien n'a été récupéré, il faut créer la liste
-        if (listFraisMois == null) {
-            listFraisMois = new Hashtable<>();
-            /* Retrait du type de l'HashTable (Optimisation Android Studio)
-             * Original : Typage explicite =
-             * Global.listFraisMois = new Hashtable<Integer, FraisMois>();
-             */
-        }
-    }
-
-    /**
      * Valorisation des propriétés avec les informations affichées
      */
     public void valoriseProprietes(DatePicker datePicker, String typeFrais) {
@@ -192,6 +164,44 @@ public final class Controleur {
 
             default:
                 Log.d("ERREUR: ", "Type de frais inconnu");
+        }
+    }
+
+    /**
+     * Supprime un frais de la liste de frais hors forfait
+     *  @param index L'index du frais hors forfait à supprimer dans la liste
+     * @param context Le contexte de l'activity sur laquelle on demande la suppression
+     */
+    public void suppFraisHf(int index, Context context) {
+        fraisMois.supprFraisHf(index);
+        serialize(context);
+    }
+
+    /**
+     * Récupère la sérialisation si elle existe
+     */
+    public void recupSerialize(Context context) {
+        /* Pour éviter le warning "Unchecked cast from Object to Hash" produit par un casting direct :
+         * Global.listFraisMois = (Hashtable<Integer, FraisMois>) Serializer.deSerialize(Global.filename, MainActivity.this);
+         * On créé un Hashtable générique <?,?> dans lequel on récupère l'Object retourné par la méthode deSerialize, puis
+         * on cast chaque valeur dans le type attendu.
+         * Seulement ensuite on affecte cet Hastable à Global.listFraisMois.
+         */
+        Hashtable<?, ?> monHash = (Hashtable<?, ?>) Serializer.deSerialize(context);
+        if (monHash != null) {
+            Hashtable<Integer, FraisMois> monHashCast = new Hashtable<>();
+            for (Hashtable.Entry<?, ?> entry : monHash.entrySet()) {
+                monHashCast.put((Integer) entry.getKey(), (FraisMois) entry.getValue());
+            }
+            listFraisMois = monHashCast;
+        }
+        // si rien n'a été récupéré, il faut créer la liste
+        if (listFraisMois == null) {
+            listFraisMois = new Hashtable<>();
+            /* Retrait du type de l'HashTable (Optimisation Android Studio)
+             * Original : Typage explicite =
+             * Global.listFraisMois = new Hashtable<Integer, FraisMois>();
+             */
         }
     }
 

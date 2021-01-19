@@ -89,8 +89,8 @@ public class HfRecapActivity extends AppCompatActivity {
      */
     public void afficheListe() {
         controleur.valoriseProprietes(datePicker, "recupFraisHf");
-        ArrayList<FraisHf> liste = controleur.getLesFraisHf();
-        FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, liste);
+        ArrayList<FraisHf> lesFraisHf = controleur.getLesFraisHf();
+        FraisHfAdapter adapter = new FraisHfAdapter(HfRecapActivity.this, lesFraisHf);
         listView.setAdapter(adapter);
     }
 
