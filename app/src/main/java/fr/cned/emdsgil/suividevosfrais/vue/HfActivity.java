@@ -13,11 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
-import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
 import fr.cned.emdsgil.suividevosfrais.R;
-import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Outils;
-import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
 /**
  * Classe de présentation de la saisie de frais hors forfait

@@ -18,7 +18,6 @@ import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHfAdapter;
 import fr.cned.emdsgil.suividevosfrais.R;
-import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 /**

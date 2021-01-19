@@ -9,9 +9,7 @@ import java.util.Hashtable;
 
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
-import fr.cned.emdsgil.suividevosfrais.outils.Global;
 import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
-import fr.cned.emdsgil.suividevosfrais.vue.MainActivity;
 
 /**
  * Classe gérant la partie contrôle du modèle MVC
@@ -25,6 +23,7 @@ import fr.cned.emdsgil.suividevosfrais.vue.MainActivity;
  */
 public final class Controleur {
 
+
     // -------- VARIABLES --------
     private static Controleur controleur = null;
     private int qte, annee, mois, jour, key;
@@ -32,6 +31,12 @@ public final class Controleur {
     private Float montant;
     private FraisMois fraisMois;
     private ArrayList<FraisHf> lesFraisHf;
+    // tableau d'informations mémorisées
+    private static Hashtable<Integer, FraisMois> listFraisMois = new Hashtable<>();
+    /* Retrait du type de l'Hashtable (Optimisation Android Studio)
+     * Original : Typage explicit =
+     * public static Hashtable<Integer, FraisMois> listFraisMois = new Hashtable<Integer, FraisMois>();
+     */
 
 
     // -------- CONSTRUCTEUR --------
@@ -76,11 +81,11 @@ public final class Controleur {
             for (Hashtable.Entry<?, ?> entry : monHash.entrySet()) {
                 monHashCast.put((Integer) entry.getKey(), (FraisMois) entry.getValue());
             }
-            Global.listFraisMois = monHashCast;
+            listFraisMois = monHashCast;
         }
         // si rien n'a été récupéré, il faut créer la liste
-        if (Global.listFraisMois == null) {
-            Global.listFraisMois = new Hashtable<>();
+        if (listFraisMois == null) {
+            listFraisMois = new Hashtable<>();
             /* Retrait du type de l'HashTable (Optimisation Android Studio)
              * Original : Typage explicite =
              * Global.listFraisMois = new Hashtable<Integer, FraisMois>();
@@ -99,8 +104,8 @@ public final class Controleur {
         this.key = (this.annee * 100) + this.mois;
 
         // récupération de la quantité correspondant au mois sélectionné (actuel par défaut)
-        if (Global.listFraisMois.containsKey(key)) {
-            this.fraisMois = Global.listFraisMois.get(key);
+        if (listFraisMois.containsKey(key)) {
+            this.fraisMois = listFraisMois.get(key);
 
             switch (this.typeFrais) {
                 case "km":
@@ -160,10 +165,10 @@ public final class Controleur {
      */
     public void enregNewQte() {
         // enregistrement dans la liste
-        if (!Global.listFraisMois.containsKey(key)) {
+        if (!listFraisMois.containsKey(key)) {
             // creation du mois et de l'annee s'ils n'existent pas déjà
-            Global.listFraisMois.put(key, new FraisMois(this.annee, this.mois));
-            this.fraisMois = Global.listFraisMois.get(this.key);
+            listFraisMois.put(key, new FraisMois(this.annee, this.mois));
+            this.fraisMois = listFraisMois.get(this.key);
         }
         switch (this.typeFrais) {
             case "km":
@@ -197,7 +202,7 @@ public final class Controleur {
      *                de frais forfaitisé)
      */
     public void serialize(Context context) {
-        Serializer.serialize(Global.listFraisMois, context);
+        Serializer.serialize(listFraisMois, context);
     }
 
 
