@@ -1,4 +1,4 @@
-package fr.cned.emdsgil.suividevosfrais.modele;
+package fr.cned.emdsgil.suividevosfrais.controleur;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,6 +14,7 @@ import java.util.Locale;
 
 import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
+import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 
 /**
  * Classe adapter pour les frais hors forfait

@@ -97,7 +97,7 @@ public class HfActivity extends AppCompatActivity {
      * Retour à l'activité principale (le menu)
      */
     private void retourActivityPrincipale() {
-        Intent intent = new Intent(HfActivity.this, MainActivity.class);
+        Intent intent = new Intent(HfActivity.this, AccueilActivity.class);
         startActivity(intent);
     }
 

@@ -92,7 +92,7 @@ public class EtapesActivity extends AppCompatActivity {
      * Retour à l'activité principale (le menu)
      */
     private void retourActivityPrincipale() {
-        Intent intent = new Intent(EtapesActivity.this, MainActivity.class);
+        Intent intent = new Intent(EtapesActivity.this, AccueilActivity.class);
         startActivity(intent);
     }
 

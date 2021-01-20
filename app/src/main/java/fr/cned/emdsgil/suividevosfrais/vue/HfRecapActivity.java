@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
-import fr.cned.emdsgil.suividevosfrais.modele.FraisHfAdapter;
+import fr.cned.emdsgil.suividevosfrais.controleur.FraisHfAdapter;
 import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
@@ -98,7 +98,7 @@ public class HfRecapActivity extends AppCompatActivity {
      * Retour à l'activité principale (le menu)
      */
     private void retourActivityPrincipale() {
-        Intent intent = new Intent(HfRecapActivity.this, MainActivity.class);
+        Intent intent = new Intent(HfRecapActivity.this, AccueilActivity.class);
         startActivity(intent);
     }
 

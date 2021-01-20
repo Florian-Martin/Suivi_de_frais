@@ -4,6 +4,8 @@
     <string name="app_name">Suivi de vos frais</string>
     <string name="euro">€</string>
     <string name="deux_points">:</string>
+    <string name="logoApp">Logo de l\'application</string>
+
 
     <!-- ACTIVITY -->
     <string name="retour_accueil">Accueil</string>
@@ -11,7 +13,12 @@
     <string name="moins">-</string>
     <string name="valider">Valider</string>
 
-    <!-- MainActivity-->
+    <!-- LoginActivity -->
+    <string name="login">Utilisateur</string>
+    <string name="password">Mot de passe</string>
+    <string name="connexion">Connexion</string>
+
+    <!-- MainActivity -->
     <string name="icone_transfert">Icone de la commande de transfert</string>
 
     <!-- KmActivity -->

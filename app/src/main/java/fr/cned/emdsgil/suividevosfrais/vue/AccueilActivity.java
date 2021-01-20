@@ -22,10 +22,11 @@ import fr.cned.emdsgil.suividevosfrais.R;
  * @author emdsgil
  * @author fmart
  */
-public class MainActivity extends AppCompatActivity {
+public class AccueilActivity extends AppCompatActivity {
 
     // -------- VARIABLES --------
     private Controleur controleur;
+    private ImageButton cmdKm, cmdHf, cmdHfRecap, cmdNuitee, cmdRepas, cmdEtape;
 
 
     // -------- CYCLE DE VIE --------
@@ -34,10 +35,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle("GSB : Suivi des frais");
+        cmdKm = findViewById(R.id.cmdKm);
+        cmdHf = findViewById(R.id.cmdHf);
+        cmdEtape = findViewById(R.id.cmdEtape);
+        cmdRepas = findViewById(R.id.cmdRepas);
+        cmdNuitee = findViewById(R.id.cmdNuitee);
+        cmdHfRecap = findViewById(R.id.cmdHfRecap);
 
         // Récupération des informations sérialisées
         controleur = Controleur.getControleur();
-        controleur.recupSerialize(MainActivity.this);
+        controleur.recupSerialize(AccueilActivity.this);
 
         // Chargement des méthodes événementielles
         onCreateListenersLoading();
@@ -62,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
      * lors d'interactions avec les composants de la vue.
      */
     private void onCreateListenersLoading() {
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdKm)), KmActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHf)), HfActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdHfRecap)), HfRecapActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdNuitee)), NuiteesActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdRepas)), RepasActivity.class);
-        cmdMenu_clic(((ImageButton) findViewById(R.id.cmdEtape)), EtapesActivity.class);
+        cmdMenu_clic(cmdKm, KmActivity.class);
+        cmdMenu_clic(cmdHf, HfActivity.class);
+        cmdMenu_clic(cmdHfRecap, HfRecapActivity.class);
+        cmdMenu_clic(cmdNuitee, NuiteesActivity.class);
+        cmdMenu_clic(cmdRepas, RepasActivity.class);
+        cmdMenu_clic(cmdEtape, EtapesActivity.class);
     }
 
 
@@ -80,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 // ouvre l'activité
-                Intent intent = new Intent(MainActivity.this, classe);
+                Intent intent = new Intent(AccueilActivity.this, classe);
                 startActivity(intent);
             }
         });

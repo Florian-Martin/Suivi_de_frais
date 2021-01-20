@@ -92,7 +92,7 @@ public class RepasActivity extends AppCompatActivity {
      * Retour à l'activité principale (le menu)
      */
     private void retourActivityPrincipale() {
-        Intent intent = new Intent(RepasActivity.this, MainActivity.class);
+        Intent intent = new Intent(RepasActivity.this, AccueilActivity.class);
         startActivity(intent);
     }
 
