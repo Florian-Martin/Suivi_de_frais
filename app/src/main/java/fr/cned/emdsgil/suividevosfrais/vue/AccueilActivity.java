@@ -15,7 +15,12 @@ import fr.cned.emdsgil.suividevosfrais.R;
 
 
 /**
- * Classe de présentation de l'activity de démarrage de l'application
+ * Classe de présentation de l'activity contenant le menu principal
+ *
+ * <p>
+ * Présente le menu permettant à l'utilisateur de choisir le type de frais qu'il veut
+ * saisir, ou d'envoyer sur la base de données distante les frais qu'il a saisi localement.
+ *
  * <p>
  * Date : 2021
  *

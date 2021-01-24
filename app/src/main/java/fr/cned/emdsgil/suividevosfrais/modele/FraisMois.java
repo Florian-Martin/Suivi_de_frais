@@ -1,7 +1,10 @@
 package fr.cned.emdsgil.suividevosfrais.modele;
 
+import org.json.JSONArray;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe métier contenant les informations des frais d'un mois
@@ -28,18 +31,19 @@ public class FraisMois implements Serializable {
         this.repas = 0;
         lesFraisHf = new ArrayList<>();
         /* Retrait du type de l'ArrayList (Optimisation Android Studio)
-		 * Original : Typage explicit =
-		 * lesFraisHf = new ArrayList<FraisHf>() ;
-		*/
+         * Original : Typage explicit =
+         * lesFraisHf = new ArrayList<FraisHf>() ;
+         */
     }
 
 
     // -------- METHODES --------
+
     /**
      * Ajout d'un frais hors forfait
      *
      * @param montant Montant en euros du frais hors forfait
-     * @param motif Justification du frais hors forfait
+     * @param motif   Justification du frais hors forfait
      */
     public void addFraisHf(Float montant, String motif, Integer jour) {
         lesFraisHf.add(new FraisHf(montant, motif, jour));
@@ -52,6 +56,25 @@ public class FraisMois implements Serializable {
      */
     public void supprFraisHf(Integer index) {
         lesFraisHf.remove(index);
+    }
+
+
+    /**
+     * Conversion d'un objet FraisMois en JSONArray
+     *
+     * @return un objet FraisMois converti en JSONArray
+     */
+    public JSONArray conversionJSONArray() {
+        List listeFraisMois = new ArrayList();
+        listeFraisMois.add(annee);
+        listeFraisMois.add(mois);
+        listeFraisMois.add(etape);
+        listeFraisMois.add(km);
+        listeFraisMois.add(nuitee);
+        listeFraisMois.add(repas);
+        listeFraisMois.add(new JSONArray(lesFraisHf));
+
+        return new JSONArray(listeFraisMois);
     }
 
 

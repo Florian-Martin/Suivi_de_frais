@@ -4,11 +4,14 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.DatePicker;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
+import fr.cned.emdsgil.suividevosfrais.outils.AccesDistant;
 import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
 
 /**
@@ -31,6 +34,8 @@ public final class Controleur {
     private Float montant;
     private FraisMois fraisMois;
     private ArrayList<FraisHf> lesFraisHf;
+    private static AccesDistant accesDistant;
+    private static Boolean statutLogin = false;
     // tableau d'informations mémorisées
     private static Hashtable<Integer, FraisMois> listFraisMois = new Hashtable<>();
     /* Retrait du type de l'Hashtable (Optimisation Android Studio)
@@ -61,6 +66,7 @@ public final class Controleur {
     public static Controleur getControleur() {
         if (Controleur.controleur == null) {
             Controleur.controleur = new Controleur();
+            accesDistant = new AccesDistant();
         }
         return Controleur.controleur;
     }
@@ -172,13 +178,24 @@ public final class Controleur {
 
     /**
      * Supprime un frais de la liste de frais hors forfait
-     *  @param index L'index du frais hors forfait à supprimer dans la liste
+     *
+     * @param index   L'index du frais hors forfait à supprimer dans la liste
      * @param context Le contexte de l'activity sur laquelle on demande la suppression
      */
     public void suppFraisHf(int index, Context context) {
         fraisMois.supprFraisHf(index);
         serialize(context);
     }
+
+    /**
+     * Envoi d'une requête HTTP afin de tester la validité des informations de login saisies
+     *
+     * @param infosLogin La concaténation de l'identifiant et du password
+     */
+    public void login(String infosLogin) {
+        this.accesDistant.requeteHttp("connexion", new JSONArray(), infosLogin);
+    }
+
 
     /**
      * Récupère la sérialisation si elle existe
@@ -254,5 +271,13 @@ public final class Controleur {
 
     public ArrayList<FraisHf> getLesFraisHf() {
         return lesFraisHf;
+    }
+
+    public static Boolean getStatutLogin() {
+        return statutLogin;
+    }
+
+    public static void setStatutLogin(Boolean statutLogin) {
+        Controleur.statutLogin = statutLogin;
     }
 }
