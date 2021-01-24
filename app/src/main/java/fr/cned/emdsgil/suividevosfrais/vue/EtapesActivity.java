@@ -32,7 +32,7 @@ public class EtapesActivity extends AppCompatActivity {
     // -------- VARIABLES --------
     private Controleur controleur;
     private DatePicker datePicker;
-    private final String typeFrais = "etapes";
+    private final static String TYPE_FRAIS = "etapes";
 
 
     // -------- CYCLE DE VIE --------
@@ -49,7 +49,7 @@ public class EtapesActivity extends AppCompatActivity {
         Outils.changeAfficheDate(datePicker, false);
 
         // valorisation de la quantité de frais saisis pour le mois sélectionné
-        controleur.valoriseProprietes(datePicker, typeFrais);
+        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
         ((EditText) findViewById(R.id.txtEtapes)).setText(String.format(Locale.FRANCE, "%d",
                 controleur.getQte()));
 
@@ -135,7 +135,7 @@ public class EtapesActivity extends AppCompatActivity {
                 new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        controleur.valoriseProprietes(datePicker, typeFrais);
+                        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
                         ((EditText) findViewById(R.id.txtEtapes)).setText(String.format(Locale.FRANCE,
                                 "%d", controleur.getQte()));
                     }

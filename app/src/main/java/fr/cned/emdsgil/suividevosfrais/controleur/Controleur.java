@@ -58,7 +58,7 @@ public final class Controleur {
      *
      * @return Controleur.controleur soit l'unique instance possible de la classe
      */
-    public final static Controleur getControleur() {
+    public static Controleur getControleur() {
         if (Controleur.controleur == null) {
             Controleur.controleur = new Controleur();
         }
@@ -102,7 +102,7 @@ public final class Controleur {
                 default:
                     Log.d("Erreur: ", "Type de frais manquant");
             }
-        } else if (typeFrais == "recupFraisHf") {
+        } else if (typeFrais.equals("recupFraisHf")) {
             lesFraisHf = new ArrayList<>();
         }
     }
@@ -114,17 +114,17 @@ public final class Controleur {
      * @param plusMoins Sa valeur dépend du bouton cliqué ("plus" ou "moins")
      */
     public void majQte(String plusMoins) {
-        if (this.typeFrais != "") {
-            if (this.typeFrais == "etapes" || this.typeFrais == "nuitees" || this.typeFrais == "repas") {
-                if (plusMoins == "plus") {
+        if (this.typeFrais != null) {
+            if (this.typeFrais.equals("etapes") || this.typeFrais.equals("nuitees") || this.typeFrais.equals("repas")) {
+                if (plusMoins.equals("plus")) {
                     this.qte += 1;
-                } else if (plusMoins == "moins") {
+                } else if (plusMoins.equals("moins")) {
                     this.qte = Math.max(0, this.qte - 1); // soustraction de 1 si qte >= 1
                 }
             } else {
-                if (plusMoins == "plus") {
+                if (plusMoins.equals("plus")) {
                     this.qte += 10;
-                } else if (plusMoins == "moins") {
+                } else if (plusMoins.equals("moins")) {
                     this.qte = Math.max(0, this.qte - 10); // soustraction de 10 si qte >= 1
                 }
             }
@@ -136,12 +136,15 @@ public final class Controleur {
      * Enregistrement dans la zone de texte et dans la liste de la nouvelle quantité, à la date choisie
      */
     public void enregNewQte() {
+
         // enregistrement dans la liste
         if (!listFraisMois.containsKey(key)) {
+
             // creation du mois et de l'annee s'ils n'existent pas déjà
             listFraisMois.put(key, new FraisMois(this.annee, this.mois));
             this.fraisMois = listFraisMois.get(this.key);
         }
+
         switch (this.typeFrais) {
             case "km":
                 fraisMois.setKm(this.qte);
@@ -188,13 +191,16 @@ public final class Controleur {
          * Seulement ensuite on affecte cet Hastable à Global.listFraisMois.
          */
         Hashtable<?, ?> monHash = (Hashtable<?, ?>) Serializer.deSerialize(context);
+
         if (monHash != null) {
             Hashtable<Integer, FraisMois> monHashCast = new Hashtable<>();
+
             for (Hashtable.Entry<?, ?> entry : monHash.entrySet()) {
                 monHashCast.put((Integer) entry.getKey(), (FraisMois) entry.getValue());
             }
             listFraisMois = monHashCast;
         }
+
         // si rien n'a été récupéré, il faut créer la liste
         if (listFraisMois == null) {
             listFraisMois = new Hashtable<>();

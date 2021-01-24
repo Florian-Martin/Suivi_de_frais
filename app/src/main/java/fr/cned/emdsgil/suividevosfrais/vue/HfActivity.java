@@ -30,7 +30,7 @@ public class HfActivity extends AppCompatActivity {
     private Controleur controleur;
     private DatePicker datePicker;
     private EditText editText;
-    private final String typeFrais = "hf";
+    private final static String TYPEFRAIS = "hf";
 
 
     // -------- CYCLE DE VIE --------
@@ -87,7 +87,7 @@ public class HfActivity extends AppCompatActivity {
      */
     private void enregListe() {
         controleur.setJour(datePicker.getDayOfMonth());
-        controleur.valoriseProprietes(datePicker, typeFrais);
+        controleur.valoriseProprietes(datePicker, TYPEFRAIS);
         controleur.setMotif(((EditText) findViewById(R.id.txtHfMotif)).getText().toString());
         controleur.setMontant(Float.valueOf(editText.getText().toString()));
         controleur.enregNewQte();

@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
      * @return True si le combo correspond.
      */
     private boolean isLoginValid() {
+        // TODO: Tester si les champs sont remplis avant d)envoyer la requête au serveur
         return true;
     }
 }

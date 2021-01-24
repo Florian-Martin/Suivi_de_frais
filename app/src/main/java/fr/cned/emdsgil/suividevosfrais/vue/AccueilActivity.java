@@ -26,7 +26,7 @@ public class AccueilActivity extends AppCompatActivity {
 
     // -------- VARIABLES --------
     private Controleur controleur;
-    private ImageButton cmdKm, cmdHf, cmdHfRecap, cmdNuitee, cmdRepas, cmdEtape;
+    private ImageButton cmdKm, cmdHf, cmdHfRecap, cmdNuitee, cmdRepas, cmdEtape, cmdTransfert;
 
 
     // -------- CYCLE DE VIE --------
@@ -41,6 +41,7 @@ public class AccueilActivity extends AppCompatActivity {
         cmdRepas = findViewById(R.id.cmdRepas);
         cmdNuitee = findViewById(R.id.cmdNuitee);
         cmdHfRecap = findViewById(R.id.cmdHfRecap);
+        cmdTransfert = findViewById(R.id.cmdTransfert);
 
         // Récupération des informations sérialisées
         controleur = Controleur.getControleur();
@@ -75,6 +76,7 @@ public class AccueilActivity extends AppCompatActivity {
         cmdMenu_clic(cmdNuitee, NuiteesActivity.class);
         cmdMenu_clic(cmdRepas, RepasActivity.class);
         cmdMenu_clic(cmdEtape, EtapesActivity.class);
+        cmdTransfert_clic();
     }
 
 
@@ -97,7 +99,7 @@ public class AccueilActivity extends AppCompatActivity {
      * Cas particulier du bouton pour le transfert d'informations vers le serveur
      */
     private void cmdTransfert_clic() {
-        findViewById(R.id.cmdTransfert).setOnClickListener(new Button.OnClickListener() {
+        cmdTransfert.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 // envoi les informations sérialisées vers le serveur
                 // en construction

@@ -32,7 +32,7 @@ public class RepasActivity extends AppCompatActivity {
     // -------- VARIABLES --------
     private Controleur controleur;
     private DatePicker datePicker;
-    private final String typeFrais = "repas";
+    private final static String TYPE_FRAIS = "repas";
 
 
     // -------- CYCLE DE VIE --------
@@ -49,7 +49,7 @@ public class RepasActivity extends AppCompatActivity {
         Outils.changeAfficheDate(datePicker, false);
 
         // valorisation de la quantité de frais saisis pour le mois sélectionné
-        controleur.valoriseProprietes(datePicker, typeFrais);
+        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
         ((EditText) findViewById(R.id.txtRepas)).setText(String.format(Locale.FRANCE, "%d",
                 controleur.getQte()));
 
@@ -135,7 +135,7 @@ public class RepasActivity extends AppCompatActivity {
                 new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        controleur.valoriseProprietes(datePicker, typeFrais);
+                        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
                         ((EditText) findViewById(R.id.txtRepas)).setText(String.format(Locale.FRANCE,
                                 "%d", controleur.getQte()));
                     }
