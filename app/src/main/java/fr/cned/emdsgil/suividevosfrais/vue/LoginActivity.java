@@ -50,41 +50,46 @@ public class LoginActivity extends AppCompatActivity {
         btnConnexion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isLoginValid()) {
-                    Intent intent = new Intent(LoginActivity.this, AccueilActivity.class);
-                    startActivity(intent);
-                    // Empêche de revenir sur cette Activity depuis AccueilActivity, une fois connecté
-                    finish();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Identifiants erronés, veuillez réessayer.", Toast.LENGTH_SHORT).show();
-                }
+                tryLogin();
             }
         });
     }
 
     /**
-     * Test de validité du login
+     * Tentative d'authentification
      * <p>
-     * Test si les champs ont été remplis, puis si le combo
-     * utilisateur / mot de passe saisi correspond avec les données de la base distante
-     *
-     * @return True si le combo correspond.
+     * Test si les champs ont été remplis, puis si le combo utilisateur / mot de passe saisi
+     * correspond avec les données de la base distante
      */
-    private boolean isLoginValid() {
+    private void tryLogin() {
         String etLoginText = etLogin.getText().toString().trim();
         String etPasswordText = etPassword.getText().toString().trim();
 
         if (etLoginText.isEmpty()) {
-            etLogin.setError("Veuillez renseigner le nom d'utilisateur");
+            etLogin.setError("Veuillez renseigner votre identifiant");
         } else if (etPasswordText.isEmpty()) {
-            etPassword.setError("Veuillez renseigner un mot de passe");
+            etPassword.setError("Veuillez renseigner votre mot de passe");
         } else {
             etLogin.setError(null);
             etPassword.setError(null);
-            controleur.login(etLoginText + "%" + etPasswordText);
+            controleur.setContexte(this);
+            controleur.logIn(etLoginText + "%" + etPasswordText);
         }
+    }
 
-        return Controleur.getStatutLogin();
+    /**
+     * Basculement sur le menu principal si l'authentification est réussie
+     *
+     * @param statutLogin Valeur de résultat de l'authentification
+     */
+    public void isLoginValid(Boolean statutLogin) {
+        if (statutLogin) {
+            Intent intent = new Intent(LoginActivity.this, AccueilActivity.class);
+            startActivity(intent);
+            // Empêche de revenir sur cette Activity depuis AccueilActivity, une fois connecté
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), "Identifiants erronés, veuillez réessayer.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
+import fr.cned.emdsgil.suividevosfrais.vue.LoginActivity;
 
 /**
  * Classe outil permettant le traitement du retour du serveur
@@ -55,9 +56,10 @@ public class AccesDistant implements AsyncResponse {
                     try {
                         JSONObject jsonObject = new JSONObject(message[1]);
                         Boolean resultatLogin = Boolean.parseBoolean(jsonObject.getString("login"));
-                        Controleur.setStatutLogin(resultatLogin);
+                        Controleur controleur = Controleur.getControleur();
+                        controleur.isLoginValid(resultatLogin);
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.d("Erreur authentification:", "Conversion du JSON impossible " + e.getMessage());
                     }
                     break;
 

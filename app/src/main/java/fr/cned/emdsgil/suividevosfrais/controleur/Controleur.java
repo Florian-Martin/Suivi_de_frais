@@ -13,6 +13,7 @@ import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
 import fr.cned.emdsgil.suividevosfrais.outils.AccesDistant;
 import fr.cned.emdsgil.suividevosfrais.outils.Serializer;
+import fr.cned.emdsgil.suividevosfrais.vue.LoginActivity;
 
 /**
  * Classe gérant la partie contrôle du modèle MVC
@@ -29,6 +30,7 @@ public final class Controleur {
 
     // -------- VARIABLES --------
     private static Controleur controleur = null;
+    private Context contexte;
     private int qte, annee, mois, jour, key;
     private String typeFrais, motif;
     private Float montant;
@@ -192,10 +194,18 @@ public final class Controleur {
      *
      * @param infosLogin La concaténation de l'identifiant et du password
      */
-    public void login(String infosLogin) {
+    public void logIn(String infosLogin) {
         this.accesDistant.requeteHttp("connexion", new JSONArray(), infosLogin);
     }
 
+    /**
+     * Récupération du résultat du test de validité de l'authentification
+     *
+     * @param statutLogin True si le test effectué côté serveur est validé
+     */
+    public void isLoginValid(Boolean statutLogin) {
+        ((LoginActivity) contexte).isLoginValid(statutLogin);
+    }
 
     /**
      * Récupère la sérialisation si elle existe
@@ -279,5 +289,9 @@ public final class Controleur {
 
     public static void setStatutLogin(Boolean statutLogin) {
         Controleur.statutLogin = statutLogin;
+    }
+
+    public void setContexte(Context contexte) {
+        this.contexte = contexte;
     }
 }
