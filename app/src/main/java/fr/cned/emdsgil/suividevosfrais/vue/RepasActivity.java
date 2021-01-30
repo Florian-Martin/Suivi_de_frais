@@ -40,18 +40,10 @@ public class RepasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repas);
-        setTitle("GSB : Frais de repas");
 
         controleur = Controleur.getControleur();
-        datePicker = findViewById(R.id.datRepas);
 
-        // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, false);
-
-        // valorisation de la quantité de frais saisis pour le mois sélectionné
-        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
-        ((EditText) findViewById(R.id.txtRepas)).setText(String.format(Locale.FRANCE, "%d",
-                controleur.getQte()));
+        init();
 
         // chargement des méthodes évènementielles
         onCreateListenersLoading();
@@ -75,6 +67,22 @@ public class RepasActivity extends AppCompatActivity {
 
 
     // -------- METHODES --------
+
+    /**
+     * Initialisation des objets graphiques et bind des views à des variables
+     */
+    private void init() {
+        setTitle("GSB : Frais de repas");
+        datePicker = findViewById(R.id.datRepas);
+
+        // modification de l'affichage du DatePicker
+        Outils.changeAfficheDate(datePicker, false);
+
+        // valorisation de la quantité de frais saisis pour le mois sélectionné
+        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
+        ((EditText) findViewById(R.id.txtRepas)).setText(String.format(Locale.FRANCE, "%d",
+                controleur.getQte()));
+    }
 
     /**
      * Chargement des méthodes évènementielles appelées

@@ -2,13 +2,13 @@ package fr.cned.emdsgil.suividevosfrais.outils;
 
 
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
-import fr.cned.emdsgil.suividevosfrais.vue.LoginActivity;
 
 /**
  * Classe outil permettant le traitement du retour du serveur
@@ -41,8 +41,10 @@ public class AccesDistant implements AsyncResponse {
      */
     @Override
     public void processFinish(String output) {
+        Controleur controleur = Controleur.getControleur();
+
         // Affichage du retour du serveur dans la console
-        Log.d("Retour serveur: ********** ", output);
+        Log.d("Retour serveur ********** ", output);
 
         // Découpage du message reçu:
         // message[0] reçoit l'opération demandée ou "Erreur" si la requête n'a pas été exécutée
@@ -52,11 +54,10 @@ public class AccesDistant implements AsyncResponse {
         if (message.length > 1) {
             switch (message[0]) {
                 case "Connexion":
-                    Log.d("Connexion: ******* ", message[1]);
+                    Log.d("Connexion ******* ", message[1]);
                     try {
                         JSONObject jsonObject = new JSONObject(message[1]);
                         Boolean resultatLogin = Boolean.parseBoolean(jsonObject.getString("login"));
-                        Controleur controleur = Controleur.getControleur();
                         controleur.isLoginValid(resultatLogin);
                     } catch (JSONException e) {
                         Log.d("Erreur authentification:", "Conversion du JSON impossible " + e.getMessage());
@@ -64,7 +65,9 @@ public class AccesDistant implements AsyncResponse {
                     break;
 
                 case "Transfert":
-                    Log.d("Transfert: ******* ", message[1]);
+                    Log.d("Transfert ******* ", message[1]);
+                    // TODO: gérer la bonne réception et insertion dans la DB des frais sérialisés côté serveur puis renvoi d'une confirmation
+                    Toast.makeText(controleur.getContext(), "Transfert réussi !", Toast.LENGTH_LONG).show();
                     break;
 
                 case "Erreur":
@@ -78,16 +81,17 @@ public class AccesDistant implements AsyncResponse {
 
     /**
      * @param operation
+     * @param jsonArray
      * @param data
      */
-    public void requeteHttp(String operation, JSONArray lesDonnees, String data) {
+    public void requeteHttp(String operation, JSONArray jsonArray, String data) {
         AccesHttp accesHttp = new AccesHttp();
         accesHttp.delegate = this;
 
         // Ajout des paramètres à l'enveloppe HTTP
         accesHttp.addParams("operation", operation);
-        accesHttp.addParams("lesDonnees", lesDonnees.toString());
         accesHttp.addParams("data", data);
+        accesHttp.addParams("listeFrais", jsonArray.toString());
 
         // Appel de execute() de la classe mère AsyncTask de AccesHttp, qui va appeler
         // la méthode doInBackground()

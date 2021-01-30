@@ -41,16 +41,10 @@ public class HfRecapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hf_recap);
-        setTitle("GSB : Récap Frais HF");
-        datePicker = findViewById(R.id.datHfRecap);
+
         controleur = Controleur.getControleur();
-        listView = findViewById(R.id.lstHfRecap);
 
-        // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, false);
-
-        // valorisation des propriétés
-        afficheListe();
+        init();
 
         // chargement des méthodes évènementielles
         onCreateListenersLoading();
@@ -74,6 +68,21 @@ public class HfRecapActivity extends AppCompatActivity {
 
 
     // -------- METHODES --------
+
+    /**
+     * Initialisation des objets graphiques et bind des views à des variables
+     */
+    private void init() {
+        setTitle("GSB : Récap Frais HF");
+        datePicker = findViewById(R.id.datHfRecap);
+        listView = findViewById(R.id.lstHfRecap);
+
+        // modification de l'affichage du DatePicker
+        Outils.changeAfficheDate(datePicker, false);
+
+        // valorisation des propriétés
+        afficheListe();
+    }
 
     /**
      * Chargement des méthodes évènementielles appelées

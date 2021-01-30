@@ -31,15 +31,26 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        btnConnexion = findViewById(R.id.loginAct_btn_connexion);
-        etLogin = findViewById(R.id.loginAct_editTxt_username);
-        etPassword = findViewById(R.id.loginAct_editTxt_password);
+
         controleur = Controleur.getControleur();
+
+        init();
 
         // Chargement des méthodes événementielles
         onCreateListenersLoading();
     }
 
+
+    // -------- METHODES --------
+
+    /**
+     * Initialisation des objets graphiques et bind des views à des variables
+     */
+    private void init() {
+        btnConnexion = findViewById(R.id.loginAct_btn_connexion);
+        etLogin = findViewById(R.id.loginAct_editTxt_username);
+        etPassword = findViewById(R.id.loginAct_editTxt_password);
+    }
 
     // -------- EVENEMENTS --------
 
@@ -72,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             etLogin.setError(null);
             etPassword.setError(null);
-            controleur.setContexte(this);
+            controleur.setContext(this);
             controleur.logIn(etLoginText + "%" + etPasswordText);
         }
     }
@@ -89,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
             // Empêche de revenir sur cette Activity depuis AccueilActivity, une fois connecté
             finish();
         } else {
-            Toast.makeText(getApplicationContext(), "Identifiants erronés, veuillez réessayer.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Identifiants erronés, veuillez réessayer.", Toast.LENGTH_SHORT).show();
         }
     }
 }

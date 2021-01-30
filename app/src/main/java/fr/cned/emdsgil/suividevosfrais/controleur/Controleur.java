@@ -5,9 +5,12 @@ import android.util.Log;
 import android.widget.DatePicker;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 import fr.cned.emdsgil.suividevosfrais.modele.FraisMois;
@@ -30,18 +33,18 @@ public final class Controleur {
 
     // -------- VARIABLES --------
     private static Controleur controleur = null;
-    private Context contexte;
+    private Context context;
     private int qte, annee, mois, jour, key;
     private String typeFrais, motif;
     private Float montant;
     private FraisMois fraisMois;
     private ArrayList<FraisHf> lesFraisHf;
     private static AccesDistant accesDistant;
-    private static Boolean statutLogin = false;
+
     // tableau d'informations mémorisées
     private static Hashtable<Integer, FraisMois> listFraisMois = new Hashtable<>();
     /* Retrait du type de l'Hashtable (Optimisation Android Studio)
-     * Original : Typage explicit =
+     * Original : Typage explicite =
      * public static Hashtable<Integer, FraisMois> listFraisMois = new Hashtable<Integer, FraisMois>();
      */
 
@@ -195,7 +198,7 @@ public final class Controleur {
      * @param infosLogin La concaténation de l'identifiant et du password
      */
     public void logIn(String infosLogin) {
-        this.accesDistant.requeteHttp("connexion", new JSONArray(), infosLogin);
+        accesDistant.requeteHttp("connexion", new JSONArray(), infosLogin);
     }
 
     /**
@@ -204,7 +207,32 @@ public final class Controleur {
      * @param statutLogin True si le test effectué côté serveur est validé
      */
     public void isLoginValid(Boolean statutLogin) {
-        ((LoginActivity) contexte).isLoginValid(statutLogin);
+        ((LoginActivity) context).isLoginValid(statutLogin);
+    }
+
+    /**
+     * Transfert de la liste de frais mensuels vers la base distante
+     *
+     * @throws JSONException
+     */
+    public void transfertFraisDb() throws JSONException {
+        Set keys = listFraisMois.keySet();
+        Iterator itr = keys.iterator();
+        String key;
+        JSONArray jsonArray = new JSONArray();
+
+        while (itr.hasNext()) {
+            key = itr.next().toString();
+
+            FraisMois fraisMois = listFraisMois.get(Integer.valueOf(key));
+            try {
+                jsonArray.put(FraisMois.toJSON(fraisMois));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Log.d("***********", jsonArray.toString());
+        accesDistant.requeteHttp("transfert", jsonArray, "");
     }
 
     /**
@@ -255,18 +283,6 @@ public final class Controleur {
         return qte;
     }
 
-    public void setTypeFrais(String typeFrais) {
-        this.typeFrais = typeFrais;
-    }
-
-    public void setAnnee(int annee) {
-        this.annee = annee;
-    }
-
-    public void setMois(int mois) {
-        this.mois = mois;
-    }
-
     public void setJour(int jour) {
         this.jour = jour;
     }
@@ -283,15 +299,15 @@ public final class Controleur {
         return lesFraisHf;
     }
 
-    public static Boolean getStatutLogin() {
-        return statutLogin;
+    public void setContext(Context contexte) {
+        this.context = contexte;
     }
 
-    public static void setStatutLogin(Boolean statutLogin) {
-        Controleur.statutLogin = statutLogin;
+    public Context getContext() {
+        return this.context;
     }
 
-    public void setContexte(Context contexte) {
-        this.contexte = contexte;
+    public static Hashtable<Integer, FraisMois> getListFraisMois() {
+        return listFraisMois;
     }
 }

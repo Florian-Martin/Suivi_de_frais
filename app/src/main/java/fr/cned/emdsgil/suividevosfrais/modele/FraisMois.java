@@ -1,6 +1,8 @@
 package fr.cned.emdsgil.suividevosfrais.modele;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -58,23 +60,33 @@ public class FraisMois implements Serializable {
         lesFraisHf.remove(index);
     }
 
-
     /**
-     * Conversion d'un objet FraisMois en JSONArray
+     * Conversion d'un objet FraisMois en JSONObject
      *
-     * @return un objet FraisMois converti en JSONArray
+     * @param frais L'objet FraisMois à parser
+     * @return Un JSONObject après avoir parsé l'objet FraisMois
+     * @throws JSONException
      */
-    public JSONArray conversionJSONArray() {
-        List listeFraisMois = new ArrayList();
-        listeFraisMois.add(annee);
-        listeFraisMois.add(mois);
-        listeFraisMois.add(etape);
-        listeFraisMois.add(km);
-        listeFraisMois.add(nuitee);
-        listeFraisMois.add(repas);
-        listeFraisMois.add(new JSONArray(lesFraisHf));
+    public static JSONObject toJSON(Object frais) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
 
-        return new JSONArray(listeFraisMois);
+        jsonObject.put("annee", ((FraisMois) frais).getAnnee());
+        jsonObject.put("mois", ((FraisMois) frais).getMois());
+        jsonObject.put("etape", ((FraisMois) frais).getEtape());
+        jsonObject.put("km", ((FraisMois) frais).getKm());
+        jsonObject.put("nuitee", ((FraisMois) frais).getNuitee());
+        jsonObject.put("repas", ((FraisMois) frais).getRepas());
+
+        for (int i = 0; i < ((FraisMois) frais).lesFraisHf.size(); i++) {
+            JSONObject listeFraisHf = new JSONObject();
+            listeFraisHf.put("motif", ((FraisMois) frais).lesFraisHf.get(i).getMotif());
+            listeFraisHf.put("montant", ((FraisMois) frais).lesFraisHf.get(i).getMontant());
+            listeFraisHf.put("jour", ((FraisMois) frais).lesFraisHf.get(i).getJour());
+            jsonArray.put(listeFraisHf);
+        }
+        jsonObject.put("fraisHf", jsonArray);
+        return jsonObject;
     }
 
 

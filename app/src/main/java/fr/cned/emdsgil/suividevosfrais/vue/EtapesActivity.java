@@ -40,18 +40,10 @@ public class EtapesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_etapes);
-        setTitle("GSB : Frais d'étapes");
 
         controleur = Controleur.getControleur();
-        datePicker = findViewById(R.id.datEtapes);
 
-        // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, false);
-
-        // valorisation de la quantité de frais saisis pour le mois sélectionné
-        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
-        ((EditText) findViewById(R.id.txtEtapes)).setText(String.format(Locale.FRANCE, "%d",
-                controleur.getQte()));
+        init();
 
         // chargement des méthodes évènementielles
         onCreateListenersLoading();
@@ -75,6 +67,22 @@ public class EtapesActivity extends AppCompatActivity {
 
 
     // -------- METHODES --------
+
+    /**
+     * Initialisation des objets graphiques et bind des views à des variables
+     */
+    private void init() {
+        setTitle("GSB : Frais d'étapes");
+        datePicker = findViewById(R.id.datEtapes);
+
+        // modification de l'affichage du DatePicker
+        Outils.changeAfficheDate(datePicker, false);
+
+        // valorisation de la quantité de frais saisis pour le mois sélectionné
+        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
+        ((EditText) findViewById(R.id.txtEtapes)).setText(String.format(Locale.FRANCE, "%d",
+                controleur.getQte()));
+    }
 
     /**
      * Chargement des méthodes évènementielles appelées

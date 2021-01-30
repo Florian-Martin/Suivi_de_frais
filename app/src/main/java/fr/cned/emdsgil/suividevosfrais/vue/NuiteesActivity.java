@@ -40,18 +40,10 @@ public class NuiteesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuitees);
-        setTitle("GSB : Frais de nuitées");
 
         controleur = Controleur.getControleur();
-        datePicker = findViewById(R.id.datNuitees);
 
-        // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, false);
-
-        // valorisation de la quantité de frais saisis pour le mois sélectionné
-        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
-        ((EditText) findViewById(R.id.txtNuitees)).setText(String.format(Locale.FRANCE, "%d",
-                controleur.getQte()));
+        init();
 
         // chargement des méthodes évènementielles
         onCreateListenersLoading();
@@ -75,6 +67,22 @@ public class NuiteesActivity extends AppCompatActivity {
 
 
     // -------- METHODES --------
+
+    /**
+     * Initialisation des objets graphiques et bind des views à des variables
+     */
+    private void init() {
+        setTitle("GSB : Frais de nuitées");
+        datePicker = findViewById(R.id.datNuitees);
+
+        // modification de l'affichage du DatePicker
+        Outils.changeAfficheDate(datePicker, false);
+
+        // valorisation de la quantité de frais saisis pour le mois sélectionné
+        controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
+        ((EditText) findViewById(R.id.txtNuitees)).setText(String.format(Locale.FRANCE, "%d",
+                controleur.getQte()));
+    }
 
     /**
      * Chargement des méthodes évènementielles appelées

@@ -9,9 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import org.json.JSONException;
 
-import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
 import fr.cned.emdsgil.suividevosfrais.R;
+import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
 
 
 /**
@@ -39,24 +40,13 @@ public class AccueilActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("GSB : Suivi des frais");
-        cmdKm = findViewById(R.id.cmdKm);
-        cmdHf = findViewById(R.id.cmdHf);
-        cmdEtape = findViewById(R.id.cmdEtape);
-        cmdRepas = findViewById(R.id.cmdRepas);
-        cmdNuitee = findViewById(R.id.cmdNuitee);
-        cmdHfRecap = findViewById(R.id.cmdHfRecap);
-        cmdTransfert = findViewById(R.id.cmdTransfert);
 
-        // Récupération des informations sérialisées
         controleur = Controleur.getControleur();
-        controleur.recupSerialize(AccueilActivity.this);
+
+        init();
 
         // Chargement des méthodes événementielles
         onCreateListenersLoading();
-
-        // Transfert des données enregistrées localement vers la base distante
-        cmdTransfert_clic();
     }
 
     @Override
@@ -69,6 +59,23 @@ public class AccueilActivity extends AppCompatActivity {
 
 
     // -------- METHODES --------
+
+    /**
+     * Initialisation des objets graphiques et bind des views à des variables
+     */
+    private void init() {
+        setTitle("GSB : Suivi des frais");
+        cmdKm = findViewById(R.id.cmdKm);
+        cmdHf = findViewById(R.id.cmdHf);
+        cmdEtape = findViewById(R.id.cmdEtape);
+        cmdRepas = findViewById(R.id.cmdRepas);
+        cmdNuitee = findViewById(R.id.cmdNuitee);
+        cmdHfRecap = findViewById(R.id.cmdHfRecap);
+        cmdTransfert = findViewById(R.id.cmdTransfert);
+
+        // Récupération des informations sérialisées
+        controleur.recupSerialize(AccueilActivity.this);
+    }
 
     /**
      * Chargement des méthodes évènementielles appelées
@@ -93,7 +100,6 @@ public class AccueilActivity extends AppCompatActivity {
     private void cmdMenu_clic(ImageButton button, final Class classe) {
         button.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                // ouvre l'activité
                 Intent intent = new Intent(AccueilActivity.this, classe);
                 startActivity(intent);
             }
@@ -101,13 +107,18 @@ public class AccueilActivity extends AppCompatActivity {
     }
 
     /**
-     * Cas particulier du bouton pour le transfert d'informations vers le serveur
+     * Transfert d'informations sérialisées vers le serveur
      */
     private void cmdTransfert_clic() {
         cmdTransfert.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                // envoi les informations sérialisées vers le serveur
-                // en construction
+                // envoi des informations sérialisées vers le serveur
+                try {
+                    controleur.setContext(AccueilActivity.this);
+                    controleur.transfertFraisDb();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

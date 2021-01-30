@@ -38,16 +38,10 @@ public class HfActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hf);
-        setTitle("GSB : Frais HF");
+
         controleur = Controleur.getControleur();
-        datePicker = findViewById(R.id.datHf);
-        editText = findViewById(R.id.txtHf);
 
-        // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, true);
-
-        // mise à 0 du montant
-        editText.setText("0");
+        init();
 
         // chargement des méthodes évènementielles
         onCreateListenersLoading();
@@ -71,6 +65,21 @@ public class HfActivity extends AppCompatActivity {
 
 
     // -------- METHODES --------
+
+    /**
+     * Initialisation des objets graphiques et bind des views à des variables
+     */
+    private void init() {
+        setTitle("GSB : Frais HF");
+        datePicker = findViewById(R.id.datHf);
+        editText = findViewById(R.id.txtHf);
+
+        // modification de l'affichage du DatePicker
+        Outils.changeAfficheDate(datePicker, true);
+
+        // mise à 0 du montant
+        editText.setText("0");
+    }
 
     /**
      * Chargement des méthodes évènementielles appelées
