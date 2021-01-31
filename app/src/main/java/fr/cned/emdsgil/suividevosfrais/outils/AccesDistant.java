@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
+import fr.cned.emdsgil.suividevosfrais.vue.LoginActivity;
 
 /**
  * Classe outil permettant le traitement du retour du serveur
@@ -57,9 +58,10 @@ public class AccesDistant implements AsyncResponse {
                     Log.d("Connexion ******* ", message[1]);
                     try {
                         JSONObject jsonObject = new JSONObject(message[1]);
-                        Boolean resultatLogin = Boolean.parseBoolean(jsonObject.getString("login"));
+                        Boolean resultatLogin = Boolean.parseBoolean(jsonObject.getString("isLogInValid"));
                         controleur.isLoginValid(resultatLogin);
                     } catch (JSONException e) {
+                        controleur.isLoginValid(false);
                         Log.d("Erreur authentification:", "Conversion du JSON impossible " + e.getMessage());
                     }
                     break;
@@ -80,9 +82,10 @@ public class AccesDistant implements AsyncResponse {
     }
 
     /**
-     * @param operation
-     * @param jsonArray
-     * @param data
+     * @param operation Le type d'opération à mener côté serveur :
+     *                  test de validité du login ou transfert de données saisies vers la base distante
+     * @param jsonArray La liste de frais de l'utilisateur formaté en JSON
+     * @param data      Les informations de connexion utilisateur
      */
     public void requeteHttp(String operation, JSONArray jsonArray, String data) {
         AccesHttp accesHttp = new AccesHttp();
