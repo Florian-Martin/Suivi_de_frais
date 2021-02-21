@@ -9,19 +9,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
-import fr.cned.emdsgil.suividevosfrais.vue.LoginActivity;
 
 /**
  * Classe outil permettant le traitement du retour du serveur
  *
- * @author fmart
+ * @author Florian MARTIN
  * @author emds
  */
 public class AccesDistant implements AsyncResponse {
 
     // -------- CONSTANTES --------
-//  private static final String SERVERADDRESS = "http://martinflorian.fr/Projets/GSB_Android/fonctions.php";
+    // Adresse pour utiliser la base distante
+    // private static final String SERVERADDRESS = "http://martinflorian.fr/Projets/GSB_Android/fonctions.php";
+    // Adresse pour le travail en local
     private static final String SERVERADDRESS = "http://192.168.1.12/GSB_Android/fonctions.php";
+
 
     // -------- CONSTRUCTEUR --------
 
@@ -48,8 +50,11 @@ public class AccesDistant implements AsyncResponse {
         Log.d("Retour serveur ********** ", output);
 
         // Découpage du message reçu:
-        // message[0] reçoit l'opération demandée ou "Erreur" si la requête n'a pas été exécutée
-        // message[1] reçoit le JSON renvoyé par le serveur
+        // message[0] = l'opération demandée ou "Erreur" si problème lors de la création du PDO
+        // message[1] = la liste des clés des frais transférés si tout s'est bien passé
+        //              lors du transfert, sinon "Erreur" si un problème est survenu
+        // message[2] = le message décrivant l'erreur survenue ou rien si tout s'est bien passé
+        // message[3] = les clés des frais transférés avant que ne survienne l'erreur
         String[] message = output.split("%");
 
         if (message.length > 1) {
@@ -57,9 +62,13 @@ public class AccesDistant implements AsyncResponse {
                 case "Connexion":
                     Log.d("Connexion ******* ", message[1]);
                     try {
-                        JSONObject jsonObject = new JSONObject(message[1]);
-                        Boolean resultatLogin = Boolean.parseBoolean(jsonObject.getString("isLogInValid"));
+                        JSONObject infosConnexion = new JSONObject(message[1]);
+                        String isLoginValid = infosConnexion.getString("isLogInValid");
+                        String idVisiteur = infosConnexion.getString("idVisiteur");
+
+                        Boolean resultatLogin = Boolean.parseBoolean(isLoginValid);
                         controleur.isLoginValid(resultatLogin);
+                        controleur.setIdVisiteur(idVisiteur);
                     } catch (JSONException e) {
                         controleur.isLoginValid(false);
                         Log.d("Erreur authentification:", "Conversion du JSON impossible " + e.getMessage());
@@ -68,12 +77,31 @@ public class AccesDistant implements AsyncResponse {
 
                 case "Transfert":
                     Log.d("Transfert ******* ", message[1]);
-                    // TODO: gérer la bonne réception et insertion dans la DB des frais sérialisés côté serveur puis renvoi d'une confirmation
-                    Toast.makeText(controleur.getContext(), "Transfert réussi !", Toast.LENGTH_LONG).show();
+
+                    if (!message[1].equals("Erreur")){
+                        // Les frais ont été intégralement transférés vers la base distante
+                        try{
+                            controleur.majListeFrais(null);
+                            controleur.serialize(controleur.getContext());
+                        }
+                        catch (JSONException e){
+                            Log.d("Erreur transfert:", "Conversion du JSON impossible " + e.getMessage());
+                        }
+                    }
+                    else{
+                        // Une partie des frais a potentiellement pu être transférée
+                        try{
+                            controleur.majListeFrais(new JSONArray(message[3]));
+                            controleur.serialize(controleur.getContext());
+                        }
+                        catch (JSONException e){
+                            Log.d("Erreur transfert:", "Conversion du JSON impossible " + e.getMessage());
+                        }
+                    }
                     break;
 
                 case "Erreur":
-                    Log.d("Erreur: ******* ", message[1]);
+                    Log.d("Erreur PDO: ******* ", message[1]);
                     break;
 
                 default:
@@ -87,11 +115,12 @@ public class AccesDistant implements AsyncResponse {
      * @param jsonArray La liste de frais de l'utilisateur formaté en JSON
      * @param data      Les informations de connexion utilisateur
      */
-    public void requeteHttp(String operation, JSONArray jsonArray, String data) {
+    public void requeteHttp(String id, String operation, JSONArray jsonArray, String data) {
         AccesHttp accesHttp = new AccesHttp();
         accesHttp.delegate = this;
 
         // Ajout des paramètres à l'enveloppe HTTP
+        accesHttp.addParams("id", id);
         accesHttp.addParams("operation", operation);
         accesHttp.addParams("data", data);
         accesHttp.addParams("listeFrais", jsonArray.toString());

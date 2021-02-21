@@ -17,19 +17,19 @@ import fr.cned.emdsgil.suividevosfrais.R;
 import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 
 /**
- * Classe de présentation de la saisie de frais hors forfait
+ * Classe de présentation de l'activity de saisie de frais hors forfait
  * <p>
  * Date : 2021
  *
  * @author emdsgil
- * @author fmart
+ * @author Florian MARTIN
  */
 public class HfActivity extends AppCompatActivity {
 
     // -------- VARIABLES --------
     private Controleur controleur;
     private DatePicker datePicker;
-    private EditText editText;
+    private EditText etMontant, etMotif;
     private final static String TYPEFRAIS = "hf";
 
 
@@ -72,13 +72,11 @@ public class HfActivity extends AppCompatActivity {
     private void init() {
         setTitle("GSB : Frais HF");
         datePicker = findViewById(R.id.datHf);
-        editText = findViewById(R.id.txtHf);
-
-        // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, true);
+        etMontant = findViewById(R.id.txtHf);
+        etMotif = findViewById(R.id.txtHfMotif);
 
         // mise à 0 du montant
-        editText.setText("0");
+        etMontant.setText("0");
     }
 
     /**
@@ -92,14 +90,38 @@ public class HfActivity extends AppCompatActivity {
 
     /**
      * Enregistrement du nouveau frais hors forfait
-     * Récupération des informations saisies puis enregistrement dans la liste
+     * <p>
+     * Récupération des informations saisies puis enregistrement dans la liste de frais si les
+     * champs ont été correctement remplis
      */
     private void enregListe() {
-        controleur.setJour(datePicker.getDayOfMonth());
-        controleur.valoriseProprietes(datePicker, TYPEFRAIS);
-        controleur.setMotif(((EditText) findViewById(R.id.txtHfMotif)).getText().toString());
-        controleur.setMontant(Float.valueOf(editText.getText().toString()));
-        controleur.enregNewQte();
+            controleur.setJour(datePicker.getDayOfMonth());
+            controleur.valoriseProprietes(datePicker, TYPEFRAIS);
+            controleur.setMotif(etMotif.getText().toString());
+            controleur.setMontant(Float.valueOf(etMontant.getText().toString()));
+            controleur.enregNewQte();
+    }
+
+    /**
+     * Teste si les champs "motif" et "montant" sont correctement remplis
+     *
+     * @return true si c'est le cas
+     */
+    private boolean champsRemplis() {
+        boolean champsRemplis = false;
+        String etMontantToString = etMontant.getText().toString().trim();
+        String etMotifToString = etMotif.getText().toString().trim();
+
+        if (etMontantToString.isEmpty()) {
+            etMontant.setError("Veuillez renseigner un montant");
+        } else if (etMotifToString.isEmpty()) {
+            etMotif.setError("Veuillez renseigner un motif");
+        } else {
+            etMontant.setError(null);
+            etMotif.setError(null);
+            champsRemplis = true;
+        }
+        return champsRemplis;
     }
 
     /**
@@ -114,7 +136,7 @@ public class HfActivity extends AppCompatActivity {
     // -------- EVENEMENTS --------
 
     /**
-     * Sur le clic du bouton ajouter :
+     * Au clic sur le bouton "ajouter" :
      * enregistrement dans la liste
      * sérialisation
      * retour au menu principal
@@ -122,15 +144,17 @@ public class HfActivity extends AppCompatActivity {
     private void cmdAjouter_clic() {
         findViewById(R.id.cmdHfAjouter).setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                enregListe();
-                controleur.serialize(HfActivity.this);
-                retourActivityPrincipale();
+                if (champsRemplis()){
+                    enregListe();
+                    controleur.serialize(HfActivity.this);
+                    retourActivityPrincipale();
+                }
             }
         });
     }
 
     /**
-     * Sur la selection de l'image : retour au menu principal
+     * Au clic sur l'image : retour au menu principal
      */
     private void imgReturn_clic() {
         findViewById(R.id.imgHfReturn).setOnClickListener(new ImageView.OnClickListener() {

@@ -22,10 +22,10 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
 /**
  * Classe de présentation de la saisie de frais forfaitisés de nuitées
  * <p>
- * Date: 2021
+ * Date : 2021
  *
  * @author emdsgil
- * @author fmart
+ * @author Florian MARTIN
  */
 public class NuiteesActivity extends AppCompatActivity {
 
@@ -76,7 +76,7 @@ public class NuiteesActivity extends AppCompatActivity {
         datePicker = findViewById(R.id.datNuitees);
 
         // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, false);
+        Outils.changeAfficheDate(datePicker, true);
 
         // valorisation de la quantité de frais saisis pour le mois sélectionné
         controleur.valoriseProprietes(datePicker, TYPE_FRAIS);

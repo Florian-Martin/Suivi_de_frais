@@ -22,7 +22,7 @@ import java.net.URLEncoder;
  * <p>
  * Date : 2021
  *
- * @author fmart
+ * @author Florian MARTIN
  * @author emds
  */
 public class AccesHttp extends AsyncTask<String, Integer, Long> {

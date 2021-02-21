@@ -25,7 +25,7 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
  * Date : 2021
  *
  * @author emdsgil
- * @author fmart
+ * @author Florian MARTIN
  */
 public class RepasActivity extends AppCompatActivity {
 
@@ -76,7 +76,7 @@ public class RepasActivity extends AppCompatActivity {
         datePicker = findViewById(R.id.datRepas);
 
         // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, false);
+        Outils.changeAfficheDate(datePicker, true);
 
         // valorisation de la quantité de frais saisis pour le mois sélectionné
         controleur.valoriseProprietes(datePicker, TYPE_FRAIS);

@@ -51,7 +51,7 @@ public abstract class Serializer {
      * Désérialisation d'un objet
      *
      * @param context Accès au contexte de l'application
-     * @return Objet déserialisé
+     * @return        Objet déserialisé
      */
     public static Object deSerialize(Context context) {
         try {

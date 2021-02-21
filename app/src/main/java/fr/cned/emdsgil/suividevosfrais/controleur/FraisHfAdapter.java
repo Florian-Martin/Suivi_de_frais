@@ -18,13 +18,15 @@ import fr.cned.emdsgil.suividevosfrais.modele.FraisHf;
 
 /**
  * Classe adapter pour les frais hors forfait
+ * <p>
  * Cette classe permet de lier les propriétés d'un objet d'une liste
- * à une ligne représentant un objet d'une ListView
+ * à des Views d'une ligne représentant un item d'une ListView
  *
  * <p>
  * Date : 2021
  *
  * @author emdsgil
+ * @author Florian MARTIN
  */
 public class FraisHfAdapter extends BaseAdapter {
 
@@ -37,7 +39,7 @@ public class FraisHfAdapter extends BaseAdapter {
     // -------- CONSTRUCTEUR --------
 
     /**
-     * Constructeur de l'adapter pour valoriser les propriétés
+     * Constructeur de l'adapter
      *
      * @param context  Accès au contexte de l'application
      * @param lesFrais Liste des frais hors forfait
@@ -83,7 +85,7 @@ public class FraisHfAdapter extends BaseAdapter {
      * {@link LayoutInflater#inflate(int, ViewGroup, boolean)}
      * to specify a root view and to prevent attachment to the root.
      *
-     * @param index    The position of the item within the adapter's data set of the item whose view
+     * @param index       The position of the item within the adapter's data set of the item whose view
      *                    we want.
      * @param convertView The old view to reuse, if possible. Note: You should check that this view
      *                    is non-null and of an appropriate type before using. If it is not possible to convert
@@ -130,7 +132,7 @@ public class FraisHfAdapter extends BaseAdapter {
 
 
     /**
-     * Structure contenant les éléments d'une ligne
+     * Structure contenant les éléments d'une ligne d'une ListView
      */
     private class ViewHolder {
         TextView txtListJour;

@@ -9,29 +9,30 @@ import java.lang.reflect.Field;
 
 /**
  * Classe permettant l'utilisation de fonctions utilitaires diverses
- * @author fmart
  *
+ * @author Florian MARTIN
+ * @author emdsgil
  */
 public abstract class Outils {
 
     // -------- METHODES --------
+
     /**
      * Modification de l'affichage de la date (juste le mois et l'année, sans le jour)
      */
-    public static void changeAfficheDate(DatePicker datePicker, boolean afficheJours) {
+    public static void changeAfficheDate(DatePicker datePicker, boolean dateMin) {
         try {
-            Field f[] = datePicker.getClass().getDeclaredFields();
-            for (Field field : f) {
-                int daySpinnerId = Resources.getSystem().getIdentifier("day", "id", "android");
-                datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), null);
-                if (daySpinnerId != 0)
-                {
-                    View daySpinner = datePicker.findViewById(daySpinnerId);
-                    if (!afficheJours)
-                    {
-                        daySpinner.setVisibility(View.GONE);
-                    }
-                }
+            int daySpinnerId = Resources.getSystem().getIdentifier("day", "id",
+                    "android");
+            datePicker.init(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
+                    null);
+            if (daySpinnerId != 0) {
+                View daySpinner = datePicker.findViewById(daySpinnerId);
+                daySpinner.setVisibility(View.GONE);
+            }
+            if (dateMin) {
+                datePicker.setMinDate(System.currentTimeMillis() - 1000);
+                datePicker.setMaxDate(System.currentTimeMillis() - 1000);
             }
         } catch (SecurityException | IllegalArgumentException e) {
             Log.d("ERROR", e.getMessage());

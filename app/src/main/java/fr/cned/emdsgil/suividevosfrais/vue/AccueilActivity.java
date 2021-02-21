@@ -26,7 +26,7 @@ import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
  * Date : 2021
  *
  * @author emdsgil
- * @author fmart
+ * @author Florian MARTIN
  */
 public class AccueilActivity extends AppCompatActivity {
 
@@ -95,7 +95,9 @@ public class AccueilActivity extends AppCompatActivity {
     // -------- EVENEMENTS --------
 
     /**
-     * Sur la sélection d'un bouton dans l'activité principale ouverture de l'activité correspondante
+     * Au clic sur une image du menu: ouverture de l'activity correspondante
+     * @param button L' ImageButton cliqué
+     * @param classe L'activity qui doit être lancée
      */
     private void cmdMenu_clic(ImageButton button, final Class classe) {
         button.setOnClickListener(new Button.OnClickListener() {
@@ -112,7 +114,6 @@ public class AccueilActivity extends AppCompatActivity {
     private void cmdTransfert_clic() {
         cmdTransfert.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                // envoi des informations sérialisées vers le serveur
                 try {
                     controleur.setContext(AccueilActivity.this);
                     controleur.transfertFraisDb();

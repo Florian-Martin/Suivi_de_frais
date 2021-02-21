@@ -3,6 +3,7 @@ package fr.cned.emdsgil.suividevosfrais.controleur;
 import android.content.Context;
 import android.util.Log;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,22 +21,22 @@ import fr.cned.emdsgil.suividevosfrais.vue.LoginActivity;
 
 /**
  * Classe gérant la partie contrôle du modèle MVC
+ * <p>
  * Cette classe permet de gérer les modifications et la persistance des données
  * suites aux interactions des utilisateurs sur les vues
  * <p>
  * Date : 2021
  *
- * @author fmart
+ * @author Florian MARTIN
  * @author emdsgil
  */
 public final class Controleur {
-
 
     // -------- VARIABLES --------
     private static Controleur controleur = null;
     private Context context;
     private int qte, annee, mois, jour, key;
-    private String typeFrais, motif;
+    private String typeFrais, motif, idVisiteur;
     private Float montant;
     private FraisMois fraisMois;
     private ArrayList<FraisHf> lesFraisHf;
@@ -63,10 +64,11 @@ public final class Controleur {
     // -------- METHODES --------
 
     /**
-     * Fonction d'accès à l'unique instance de la classe
+     * Récupération de l'unique instance de la classe
+     * <p>
      * Retourne, ou créée si elle n'existe pas encore, l'unique instance de la classe
      *
-     * @return Controleur.controleur soit l'unique instance possible de la classe
+     * @return Controleur.controleur L'unique instance possible de la classe
      */
     public static Controleur getControleur() {
         if (Controleur.controleur == null) {
@@ -76,8 +78,9 @@ public final class Controleur {
         return Controleur.controleur;
     }
 
+
     /**
-     * Valorisation des propriétés avec les informations affichées
+     * Valorisation des propriétés avec les informations affichées sur les différentes views
      */
     public void valoriseProprietes(DatePicker datePicker, String typeFrais) {
         this.annee = datePicker.getYear();
@@ -111,7 +114,6 @@ public final class Controleur {
                     this.lesFraisHf = fraisMois.getLesFraisHf();
 
                 default:
-                    Log.d("Erreur: ", "Type de frais manquant");
             }
         } else if (typeFrais.equals("recupFraisHf")) {
             lesFraisHf = new ArrayList<>();
@@ -120,13 +122,15 @@ public final class Controleur {
 
     /**
      * Mise à jour de la quantité du frais saisi
+     * <p>
      * Mise à jour de l'editText en fonction du bouton cliqué ("plus" ou "moins")
      *
      * @param plusMoins Sa valeur dépend du bouton cliqué ("plus" ou "moins")
      */
     public void majQte(String plusMoins) {
         if (this.typeFrais != null) {
-            if (this.typeFrais.equals("etapes") || this.typeFrais.equals("nuitees") || this.typeFrais.equals("repas")) {
+            if (this.typeFrais.equals("etapes") || this.typeFrais.equals("nuitees")
+                    || this.typeFrais.equals("repas")) {
                 if (plusMoins.equals("plus")) {
                     this.qte += 1;
                 } else if (plusMoins.equals("moins")) {
@@ -136,7 +140,7 @@ public final class Controleur {
                 if (plusMoins.equals("plus")) {
                     this.qte += 10;
                 } else if (plusMoins.equals("moins")) {
-                    this.qte = Math.max(0, this.qte - 10); // soustraction de 10 si qte >= 1
+                    this.qte = Math.max(0, this.qte - 10); // soustraction de 10 si qte >= 10
                 }
             }
         }
@@ -148,10 +152,8 @@ public final class Controleur {
      */
     public void enregNewQte() {
 
-        // enregistrement dans la liste
+        // création du frais s'il n'existe pas encore pour ce mois
         if (!listFraisMois.containsKey(key)) {
-
-            // creation du mois et de l'annee s'ils n'existent pas déjà
             listFraisMois.put(key, new FraisMois(this.annee, this.mois));
             this.fraisMois = listFraisMois.get(this.key);
         }
@@ -198,7 +200,7 @@ public final class Controleur {
      * @param infosLogin La concaténation de l'identifiant et du password
      */
     public void logIn(String infosLogin) {
-        accesDistant.requeteHttp("connexion", new JSONArray(), infosLogin);
+        accesDistant.requeteHttp("", "connexion", new JSONArray(), infosLogin);
     }
 
     /**
@@ -232,11 +234,38 @@ public final class Controleur {
             }
         }
         Log.d("***********", jsonArray.toString());
-        accesDistant.requeteHttp("transfert", jsonArray, "");
+        accesDistant.requeteHttp(this.idVisiteur, "transfert", jsonArray, "");
+    }
+
+    /**
+     * Mise à jour de la liste de frais du visiteur
+     * <p>
+     * Si lors du transfert vers la base distante tout s'est bien déroulé la méthode reçoit
+     * un JSONArray vide et la liste de frais du visiteur est vidée.
+     * <p>
+     * S'il y a eu un problème lors du transfert, le paramètre reçu contient un JSONArray
+     * comportant les clés des frais qui ont pu être transférés avant que le problème survienne.
+     *
+     * @param jsonArray un JSONArray composé des clés des frais à supprimer ou vide
+     * @throws JSONException
+     */
+    public void majListeFrais(JSONArray jsonArray) throws JSONException {
+        if (jsonArray == null) {
+            listFraisMois.clear();
+            Toast.makeText(controleur.getContext(), "Transfert réussi !", Toast.LENGTH_LONG).show();
+        } else {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                listFraisMois.remove(Integer.parseInt(jsonArray.get(i).toString()));
+                Log.d("SUPPRLISTE mois = ", jsonArray.get(i).toString());
+            }
+            Toast.makeText(controleur.getContext(), "Transfert partiellement réussi", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
      * Récupère la sérialisation si elle existe
+     *
+     * @param context : le contexte actuel de l'application
      */
     public void recupSerialize(Context context) {
         /* Pour éviter le warning "Unchecked cast from Object to Hash" produit par un casting direct :
@@ -260,8 +289,7 @@ public final class Controleur {
         if (listFraisMois == null) {
             listFraisMois = new Hashtable<>();
             /* Retrait du type de l'HashTable (Optimisation Android Studio)
-             * Original : Typage explicite =
-             * Global.listFraisMois = new Hashtable<Integer, FraisMois>();
+             * Original : Typage explicite : listFraisMois = new Hashtable<Integer, FraisMois>();
              */
         }
     }
@@ -307,7 +335,7 @@ public final class Controleur {
         return this.context;
     }
 
-    public static Hashtable<Integer, FraisMois> getListFraisMois() {
-        return listFraisMois;
+    public void setIdVisiteur(String idVisiteur) {
+        this.idVisiteur = idVisiteur;
     }
 }

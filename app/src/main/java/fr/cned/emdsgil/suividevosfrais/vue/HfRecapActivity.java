@@ -26,7 +26,7 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
  * Date : 2021
  *
  * @author emdsgil
- * @author fmart
+ * @author Florian MARTIN
  */
 public class HfRecapActivity extends AppCompatActivity {
 

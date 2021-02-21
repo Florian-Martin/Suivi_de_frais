@@ -10,16 +10,22 @@ import java.util.List;
 
 /**
  * Classe métier contenant les informations des frais d'un mois
+ *
+ * <p>
+ * Date : 2021
+ *
+ * @author emdsgil
+ * @author Florian MARTIN
  */
 public class FraisMois implements Serializable {
 
     // -------- VARIABLES --------
-    private Integer mois; // mois concerné
-    private Integer annee; // année concernée
-    private Integer etape; // nombre d'étapes du mois
-    private Integer km; // nombre de km du mois
-    private Integer nuitee; // nombre de nuitées du mois
-    private Integer repas; // nombre de repas du mois
+    private Integer mois;                        // mois concerné
+    private Integer annee;                       // année concernée
+    private Integer etape;                       // nombre d'étapes du mois
+    private Integer km;                          // nombre de km du mois
+    private Integer nuitee;                      // nombre de nuitées du mois
+    private Integer repas;                       // nombre de repas du mois
     private final ArrayList<FraisHf> lesFraisHf; // liste des frais hors forfait du mois
 
 
@@ -95,16 +101,8 @@ public class FraisMois implements Serializable {
         return mois;
     }
 
-    public void setMois(Integer mois) {
-        this.mois = mois;
-    }
-
     public Integer getAnnee() {
         return annee;
-    }
-
-    public void setAnnee(Integer annee) {
-        this.annee = annee;
     }
 
     public Integer getEtape() {
@@ -142,5 +140,4 @@ public class FraisMois implements Serializable {
     public ArrayList<FraisHf> getLesFraisHf() {
         return lesFraisHf;
     }
-
 }

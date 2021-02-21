@@ -17,7 +17,7 @@ import fr.cned.emdsgil.suividevosfrais.controleur.Controleur;
  * <p>
  * Date : 2021
  *
- * @author fmart
+ * @author Florian MARTIN
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnConnexion;
     private EditText etLogin, etPassword;
     private Controleur controleur;
+
 
     // -------- CYCLE DE VIE --------
     @Override
@@ -69,22 +70,22 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Tentative d'authentification
      * <p>
-     * Test si les champs ont été remplis, puis si le combo utilisateur / mot de passe saisi
+     * Teste si les champs ont été remplis, puis si le combo utilisateur / mot de passe saisi
      * correspond avec les données de la base distante
      */
     private void tryLogin() {
-        String etLoginText = etLogin.getText().toString().trim();
-        String etPasswordText = etPassword.getText().toString().trim();
+        String etLoginToString = etLogin.getText().toString().trim();
+        String etPasswordToString = etPassword.getText().toString().trim();
 
-        if (etLoginText.isEmpty()) {
+        if (etLoginToString.isEmpty()) {
             etLogin.setError("Veuillez renseigner votre identifiant");
-        } else if (etPasswordText.isEmpty()) {
+        } else if (etPasswordToString.isEmpty()) {
             etPassword.setError("Veuillez renseigner votre mot de passe");
         } else {
             etLogin.setError(null);
             etPassword.setError(null);
             controleur.setContext(this);
-            controleur.logIn(etLoginText + "%" + etPasswordText);
+            controleur.logIn(etLoginToString + "%" + etPasswordToString);
         }
     }
 

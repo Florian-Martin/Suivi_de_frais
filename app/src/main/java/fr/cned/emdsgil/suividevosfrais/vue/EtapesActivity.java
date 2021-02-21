@@ -13,6 +13,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import fr.cned.emdsgil.suividevosfrais.R;
@@ -25,7 +27,7 @@ import fr.cned.emdsgil.suividevosfrais.outils.Outils;
  * Date : 2021
  *
  * @author emdsgil
- * @author fmart
+ * @author Florian MARTIN
  */
 public class EtapesActivity extends AppCompatActivity {
 
@@ -33,6 +35,7 @@ public class EtapesActivity extends AppCompatActivity {
     private Controleur controleur;
     private DatePicker datePicker;
     private final static String TYPE_FRAIS = "etapes";
+    private Calendar calendar;
 
 
     // -------- CYCLE DE VIE --------
@@ -76,7 +79,7 @@ public class EtapesActivity extends AppCompatActivity {
         datePicker = findViewById(R.id.datEtapes);
 
         // modification de l'affichage du DatePicker
-        Outils.changeAfficheDate(datePicker, false);
+        Outils.changeAfficheDate(datePicker, true);
 
         // valorisation de la quantité de frais saisis pour le mois sélectionné
         controleur.valoriseProprietes(datePicker, TYPE_FRAIS);
