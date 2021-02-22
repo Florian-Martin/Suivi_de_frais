@@ -2,7 +2,7 @@
 
 ### Objectifs:
 
-* Cette application Android a pour vocation la consultation et la saisie de frais forfaitisés et hors forfait par les visiteurs médicaux du groupe GSB.
+* Cette application Android a pour vocation la saisie et la consultation de frais forfaitisés et hors forfait par les visiteurs médicaux du groupe GSB.
 
 ### Technologie utilisées:
 
@@ -22,14 +22,14 @@
  
 ### Fonctionnement:
  
-* Au démarrage de l'application, l'utilisateur (via un menu composé de plusieurs boutons avec icône représentant le type de frais) a la possibilité de saisir des frais forfaitisés ou hors forfait, ainsi que de consulter les frais qu'il a déjà préalablement saisis pour un mois et une année (forfaitisés) et pour un jour précis du mois d'une année pour les frais hors forfait.
+* Au démarrage de l'application, l'utilisateur (via un menu composé de plusieurs boutons avec icône représentant le type de frais) a la possibilité de saisir des frais forfaitisés ou hors forfait, ainsi que de consulter les frais hors forfait qu'il a déjà préalablement saisis pour un mois et une année.
  
 * La saisie, et l'affichage des frais préalablement saisis, se font sur la même activity pour les frais forfaitisés, et sur 2 "activities"
 distinctes pour les frais hors forfait.
 Pour les frais hors forfait l'affichage des données saisies se fait via une ListView déroulante avec pour information la date, le montant
 et le motif. Il est aussi possible depuis cet affichage de supprimer un frais via un bouton relié à chaque ligne de la liste.
 
-* Le choix de la date pour se fait via un objet graphique de type DatePicker (link image si possible) peu importe le type de frais.
+* Le choix de la date pour se fait via un objet graphique de type DatePicker peu importe le type de frais.
 
 ### Persistance des données:
 
