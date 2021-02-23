@@ -2,7 +2,6 @@ package fr.cned.emdsgil.suividevosfrais.outils;
 
 
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,9 +19,9 @@ public class AccesDistant implements AsyncResponse {
 
     // -------- CONSTANTES --------
     // Adresse pour utiliser la base distante
-    // private static final String SERVERADDRESS = "http://martinflorian.fr/Projets/GSB_Android/fonctions.php";
+    private static final String SERVERADDRESS = "http://martinflorian.fr/Projets/GSB/application_Android/fonctions.php";
     // Adresse pour le travail en local
-    private static final String SERVERADDRESS = "http://192.168.1.12/GSB_Android/fonctions.php";
+   // private static final String SERVERADDRESS = "http://192.168.1.12/GSB_Android/fonctions.php";
 
 
     // -------- CONSTRUCTEUR --------

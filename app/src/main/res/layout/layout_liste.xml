@@ -29,9 +29,9 @@
         android:id="@+id/txtListMontant"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_weight="1.5"
+        android:layout_weight="1.8"
         android:gravity="end"
-        android:paddingLeft="2dp"
+        android:maxLines="1"
         android:paddingRight="2dp"
         android:textSize="20sp" />
 

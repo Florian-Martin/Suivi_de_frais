@@ -74,9 +74,6 @@ public class HfActivity extends AppCompatActivity {
         datePicker = findViewById(R.id.datHf);
         etMontant = findViewById(R.id.txtHf);
         etMotif = findViewById(R.id.txtHfMotif);
-
-        // mise à 0 du montant
-        etMontant.setText("0");
     }
 
     /**
@@ -112,8 +109,8 @@ public class HfActivity extends AppCompatActivity {
         String etMontantToString = etMontant.getText().toString().trim();
         String etMotifToString = etMotif.getText().toString().trim();
 
-        if (etMontantToString.isEmpty()) {
-            etMontant.setError("Veuillez renseigner un montant");
+        if (etMontantToString.isEmpty() || etMontantToString.equals("0")) {
+            etMontant.setError("Veuillez renseigner un montant supérieur à 0");
         } else if (etMotifToString.isEmpty()) {
             etMotif.setError("Veuillez renseigner un motif");
         } else {
