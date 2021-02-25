@@ -154,7 +154,7 @@ if ($operation) {
                 // Insertion des frais hors forfait
                 // On enregistre les frais hors forfait datant d'un an maximum.
                 foreach ($unFrais['fraisHf'] as $unFraisHf) {
-                    $dateHf = modifDate($dateFrais, "hf", $unFraisHf['jour']);
+                    $dateHf = modifDate($dateFrais, $unFraisHf['jour']);
                     //print ("Jour = " . $unFraisHf['jour'] . " / Motif = " . $unFraisHf['motif'] . " / Montant = " . $unFraisHf['montant']);
                     if (diffDates($dateHf)){
                         nouvelleLigneHf($mPDO, $idVisiteur, $moisCourant, $unFraisHf,
@@ -179,7 +179,8 @@ if ($operation) {
  *    
  * @return boolean              Retourne vrai si c'est le premier frais du mois
  */
-function estPremierFraisMois($mPDO, $idVisiteur, $dateFrais): bool {
+function estPremierFraisMois($mPDO, $idVisiteur, $dateFrais): bool 
+{
     //print ("idvisi = " . $idVisiteur . " date = " . $dateFrais);
 
     $boolReturn = true;
@@ -199,7 +200,8 @@ function estPremierFraisMois($mPDO, $idVisiteur, $dateFrais): bool {
  * @param String $idVisiteur    ID du visiteur
  * @param String $dateFrais     Mois sous la forme aaaamm
  */
-function getFicheFrais($mPDO, $idVisiteur, $dateFrais) {
+function getFicheFrais($mPDO, $idVisiteur, $dateFrais) 
+{
     $requete = $mPDO->prepare(
             'SELECT * '
             . 'FROM fichefrais '
@@ -222,7 +224,8 @@ function getFicheFrais($mPDO, $idVisiteur, $dateFrais) {
  * @return Array                Retourne tous les frais forfaitisés du visiteur pour
  *                              un mois donné sous forme de tableau associatif 
  */
-function getFraisMois($mPDO, $idVisiteur, $dateFrais): array {
+function getFraisMois($mPDO, $idVisiteur, $dateFrais): array 
+{
     $requete = $mPDO->prepare(
             "SELECT * FROM lignefraisforfait "
             . "WHERE idvisiteur = :idVisiteur "
@@ -246,7 +249,8 @@ function getFraisMois($mPDO, $idVisiteur, $dateFrais): array {
  *                                      remplacer la quantité préalablement enregistrée
  */
 function updateLigneFraisForfaitise($mPDO, $idVisiteur, $dateFrais, $unTypeDeFrais,
-        $qteFrais) {
+        $qteFrais) 
+{
     $requete = $mPDO->prepare(
             "UPDATE lignefraisforfait "
             . "SET quantite = :qteFrais "
@@ -271,7 +275,8 @@ function updateLigneFraisForfaitise($mPDO, $idVisiteur, $dateFrais, $unTypeDeFra
  * @param String $idVisiteur    ID du visiteur
  * @param String $dateFrais     Mois sous la forme aaaamm
  */
-function creeFicheFrais($mPDO, $idVisiteur, $dateFrais) {
+function creeFicheFrais($mPDO, $idVisiteur, $dateFrais) 
+{
     $requete = $mPDO->prepare(
             "INSERT into fichefrais "
             . "VALUES (:idVisiteur, :dateFrais, 0, 0, now(), 'CR')"
@@ -288,7 +293,8 @@ function creeFicheFrais($mPDO, $idVisiteur, $dateFrais) {
  * 
  * @return          Un tableau associatif contenant tous les ID de frais forfaitisés
  */
-function getIdFrais($mPDO) {
+function getIdFrais($mPDO) 
+{
     $requete = $mPDO->prepare(
             'SELECT id FROM fraisforfait'
     );
@@ -306,7 +312,8 @@ function getIdFrais($mPDO) {
  *                              relatives à un type de frais   
  * @param Integer   $qteFrais   La quantité du frais en question
  */
-function nouvelleLigneFraisForfaitise($mPDO, $idVisiteur, $dateFrais, $idFrais, $qteFrais) {
+function nouvelleLigneFraisForfaitise($mPDO, $idVisiteur, $dateFrais, $idFrais, $qteFrais) 
+{
     $requete = $mPDO->prepare(
             "INSERT into lignefraisforfait(idvisiteur,mois,"
             . "idfraisforfait,quantite) "
@@ -329,7 +336,8 @@ function nouvelleLigneFraisForfaitise($mPDO, $idVisiteur, $dateFrais, $idFrais, 
  * @param Array     $unFraisHf  Tableau associatif représentant un frais hors forfait
  * @param String    $dateHf     La date du frais mise au format AAAA-MM-JJ
  */
-function nouvelleLigneHf($mPDO, $idVisiteur, $dateFrais, $unFraisHf, $dateHf) {
+function nouvelleLigneHf($mPDO, $idVisiteur, $dateFrais, $unFraisHf, $dateHf) 
+{
     $requete = $mPDO->prepare(
             "INSERT into lignefraishorsforfait "
             . "VALUES (null, :idVisiteur, :dateFrais, :motif, :dateEng, :montant)"
@@ -343,96 +351,65 @@ function nouvelleLigneHf($mPDO, $idVisiteur, $dateFrais, $unFraisHf, $dateHf) {
 }
 
 /**
- * Calcule l'intervalle entre 2 dates.
+ * Détermine la validité de la date d'un frais.
  * 
- * Le calcul soustrait le mois suivant celui passé en paramètre à la date d'aujourd'hui
- * grâce à la fonction <code>diff()</code> de la classe DateTime
- * d'où le test "< 12" lors de l'appel de la fonction pour contrer le fait que le 
- * mois retranché est le suivant du mois passé en paramètre.
+ * Un frais hors forfait est considéré valide s'il date de moins d'un an.
+ * Au mois d'Août 2021 on peut saisir un frais hors forfait allant de Septembre 
+ * 2020 à Août 2021. On ne peut pas non plus saisir un frais pour un jour ultérieur
+ * au jour de saisie.
  * 
- * @param  String    $dateFrais  Mois sous la forme aaaamm
- * 
- * @return Integer              Le nombre de mois séparant les 2 dates
+ * @param String    $dateFraisHf Date sous la forme AAAA-MM-JJ
+ * @return bool     Retourne vrai si la date passée en paramètre est valide
  */
-function diffDates($dateFraisHf): bool {
-    
-    // Affectation du fuseau horaire de Paris pour éviter que le décalage horaire avec les US,
-    // qui sont pris en fuseau horaire de référence, ne fausse la date du jour de saisie
+function diffDates($dateFraisHf): bool 
+{
+    // Affectation du fuseau horaire de Paris pour éviter que le décalage horaire 
+    // avec les US, qui sont pris en fuseau horaire par défaut, ne fausse la date
+    // du jour de saisie
     $d1 = new DateTime('NOW', new DateTimeZone('Europe/Paris'));
     $d2 = new DateTime($dateFraisHf, new DateTimeZone('Europe/Paris'));
     
-    // Calcul de la différence entre les 2 objets DateTime : renvoie un objet DateInterval
+    // Calcul de la différence entre les 2 objets DateTime : renvoie un objet 
+    // DateInterval
     // voir https://www.php.net/manual/fr/class.dateinterval.php
     $interval = $d2->diff($d1);
     
-    $isDateValid = false; // renvoie true si la date effective du frais hors forfait
-                   // date d'un an en arrière au maximum et ne dépasse pas la date
-                   // du jour de saisie (le 18 Août 2021 on peut saisir un frais de
-                   // Septembre 2020 mais pas un frais du 19 Août 2021)
+    // True si la date effective du frais hors forfait est valide
+    $isDateValid = false; 
  
-    // La propriété "invert" d'un objet DateInterval = 0 lorsque la date qui est soustraite
-    // est inférieure à la date de référence, sinon = 1.
+    // La propriété "invert" d'un objet DateInterval = 0 lorsque la date qui est 
+    // soustraite est inférieure à la date de référence, sinon = 1.
     if (!$interval->invert){
-        // Si l'année des 2 dates est la même le frais est valide
+        // Si l'année des 2 dates est la même le frais est forcément valide
         if ($d1->format('Y') === $d2->format('Y')){
             $isDateValid = true;
         }
         else{
             // Si l'année du frais est inférieure à la date du jour de saisie
             // le mois du frais doit être supérieur au mois de la date de saisie
-            // et la différence entre les 2 dates inférieure ou égale à 366
+            // et la différence entre les 2 dates inférieure ou égale à 366 jours
             if ($d2->format('m') > $d1->format('m') && $interval->days <= 366){
                 $isDateValid = true;
             }
         }
     }
     return $isDateValid;
-    
-    
-    
-    
-    
-    
-    
-    /*
-    $dateAuj = date('Ym');
-    $date = modifDate($dateFrais, "", "");
-
-    $d1 = new DateTime($dateAuj);
-    $d2 = new DateTime($date);
-
-    $intervalle = $d2->diff($d1);
-    $diffMois = $intervalle->y * 12 + $intervalle->m;
-
-    // La propriété "invert" d'un objet DateTime = 0 lorsque la date qui est soustraite
-    // est inférieure à la date de référence, sinon = 1.
-    if ($intervalle->invert == 0) {
-        return $diffMois;
-    } else {
-        return $diffMois * 100;
-    }
-     * 
-     */
 }
 
 /**
  * Modifie le format d'une date
- * 
- * Pour un frais forfaitisé la date sera formatée de la manière AAAA-MM
+
  * Pour un frais hors forfait le format de sortie sera AAAA-MM-JJ
  * 
  * @param String  $dateFrais    La date dont le format doit être modifié
- * @param String  $typeFrais    Vide pour un frais forfaitisé, "hf" pour un hors forfait
  * @param Integer $jour         Le jour du mois d'un frais hors forfait
  * 
- * @return string               la date dont le format a été modifié 
+ * @return String               La date dont le format a été modifié 
  */
-function modifDate($dateFrais, $typeFrais, $jour): string {
+function modifDate($dateFrais, $jour): string 
+{
     $date = substr_replace($dateFrais, "-", 4, 0);
-    if ($typeFrais == "hf") {
-        $date = substr_replace($date, "-" . $jour, 7, 0);
-    }
-    return $date;
+    return substr_replace($date, "-" . $jour, 7, 0);
 }
 
 /**
@@ -440,7 +417,8 @@ function modifDate($dateFrais, $typeFrais, $jour): string {
  * 
  * @param PDO $mPDO Objet permettant la connexion à une base de données
  */
-function login($mPDO) {
+function login($mPDO) 
+{
     // Récupération de l'identifiant et mot de passe envoyés en POST
     $lesDonnees = filter_input(INPUT_POST, "data", FILTER_SANITIZE_STRING);
 
