@@ -26,6 +26,8 @@
  * @package GSB
  * @link    http://www.php.net/manual/fr/book.pdo.php PHP Data Objects sur php.net
  */
+
+
 include "connexion_PDO.php";
 
 // Contrôle de réception de paramètres
@@ -57,9 +59,9 @@ if ($operation) {
             $idVisiteur = filter_input(INPUT_POST, "id", FILTER_SANITIZE_STRING);
             $lesFrais = json_decode($lesDonnees, true);
             $tabFraisTraites = [];
-
+            
             foreach ($lesFrais as $frais) {
-
+                
                 $unFrais = [
                     "annee" => $frais['annee'],
                     "mois" => $frais['mois'],
@@ -78,24 +80,29 @@ if ($operation) {
 
                 $dateFrais = $unFrais['annee'] . $unFrais['mois'];
                 //print (" DateFrais = " . $dateFrais . " Différence en mois = " . diffDates($dateFrais) . " mois.");
-                // Mois sous la forme AAAAMM
-                $moisCourant = date('Ym');
+                
+                // On enregistre les frais hors forfait datant d'un an maximum.
+                // Pour les frais forfaitisés seul le mois courant est permis
+                if (diffDates($dateFrais) < 12) {
+                  
+                    // Mois sous la forme AAAAMM
+                    $moisCourant = date('Ym');
+                    
+                    // S'il n'existe pas déjà une fiche de frais pour ce mois,
+                    // on en créée une
+                    // print(" Date = " . $dateFrais . " 1erFraisMois ? = " . estPremierFraisMois($mPDO, $idVisiteur, $dateFrais)); 
+                    if (estPremierFraisMois($mPDO, $idVisiteur, $moisCourant)) {
+                        // Création d'une fiche de frais pour le mois courant
+                        creeFicheFrais($mPDO, $idVisiteur, $moisCourant);
 
-                // S'il n'existe pas déjà une fiche de frais pour ce mois,
-                // on en créée une
-                // print(" Date = " . $dateFrais . " 1erFraisMois ? = " . estPremierFraisMois($mPDO, $idVisiteur, $dateFrais)); 
-                if (estPremierFraisMois($mPDO, $idVisiteur, $moisCourant)) {
-                    // Création d'une fiche de frais pour le mois courant
-                    creeFicheFrais($mPDO, $idVisiteur, $moisCourant);
+                        //print (" idvisiteur = " . $idVisiteur . " dateFrais = " . $dateFrais);
+                        // Récupération de chaque type de frais forfaitisé
+                        $lesIdFrais = getIdFrais($mPDO);
 
-                    //print (" idvisiteur = " . $idVisiteur . " dateFrais = " . $dateFrais);
-                    // Récupération de chaque type de frais forfaitisé
-                    $lesIdFrais = getIdFrais($mPDO);
-
-                    // Insertion de la quantité de chaque type de frais forfaitisé
-                    foreach ($lesIdFrais as $idFrais) {
-                        $qteFrais;
-                        switch ($idFrais['id']) {
+                        // Insertion de la quantité de chaque type de frais forfaitisé
+                        foreach ($lesIdFrais as $idFrais) {
+                            $qteFrais;
+                            switch ($idFrais['id']) {
                             case 'ETP':
                                 $qteFrais = $unFrais['etape'];
                                 break;
@@ -109,54 +116,52 @@ if ($operation) {
                                 $qteFrais = $unFrais['repas'];
                                 break;
                             default:
-                        }
-                        nouvelleLigneFraisForfaitise($mPDO, $idVisiteur,
-                                $moisCourant, $idFrais, $qteFrais);
-                    }
-                } else {
-                    // Mise à jour des frais si la fiche n'a pas encore été clôturée
-                    $ficheFrais = getFicheFrais($mPDO, $idVisiteur, $moisCourant);
-
-                    if ($ficheFrais['idetat'] == "CR") {
-                        // Récupération des frais existants pour ce mois
-                        $lesTypesDeFrais = getFraisMois($mPDO, $idVisiteur,
-                                $moisCourant);
-
-                        // Mise à jour des frais existants
-                        foreach ($lesTypesDeFrais as $unTypeDeFrais) {
-                            switch ($unTypeDeFrais['idfraisforfait']) {
-                            case 'ETP':
-                                $qteFrais = $unFrais['etape']
-                                    + $unTypeDeFrais['quantite'];
-                                break;
-                            case 'KM':
-                                $qteFrais = $unFrais['km']
-                                    + $unTypeDeFrais['quantite'];
-                                break;
-                            case 'NUI':
-                                $qteFrais = $unFrais['nuitee']
-                                    + $unTypeDeFrais['quantite'];
-                                break;
-                            case 'REP':
-                                $qteFrais = $unFrais['repas']
-                                    + $unTypeDeFrais['quantite'];
-                                break;
-                            default:
                             }
-                            //print ("date = " . $dateFrais . " type = " . $unTypeDeFrais['idfraisforfait'] . "qte = " . $qteFrais);
-                            updateLigneFraisForfaitise($mPDO, $idVisiteur,
-                                    $moisCourant,
-                                    $unTypeDeFrais,
-                                    $qteFrais);
+                            nouvelleLigneFraisForfaitise($mPDO, $idVisiteur,
+                                    $moisCourant, $idFrais, $qteFrais);
                         }
-                    }
-                }
-                // Insertion des frais hors forfait
-                // On enregistre les frais hors forfait datant d'un an maximum.
-                foreach ($unFrais['fraisHf'] as $unFraisHf) {
-                    $dateHf = modifDate($dateFrais, $unFraisHf['jour']);
-                    //print ("Jour = " . $unFraisHf['jour'] . " / Motif = " . $unFraisHf['motif'] . " / Montant = " . $unFraisHf['montant']);
-                    if (diffDates($dateHf)){
+                    } else {
+                        // Mise à jour des frais si la fiche n'a pas encore été clôturée
+                        $ficheFrais = getFicheFrais($mPDO, $idVisiteur, $moisCourant);
+                        
+                        if ($ficheFrais['idetat'] == "CR") {
+                            // Récupération des frais existants pour ce mois
+                            $lesTypesDeFrais = getFraisMois($mPDO, $idVisiteur,
+                                    $moisCourant);
+
+                            // Mise à jour des frais existants
+                            foreach ($lesTypesDeFrais as $unTypeDeFrais) {
+                                switch ($unTypeDeFrais['idfraisforfait']) {
+                                case 'ETP':
+                                    $qteFrais = $unFrais['etape'] 
+                                                + $unTypeDeFrais['quantite'];
+                                    break;
+                                case 'KM':
+                                    $qteFrais = $unFrais['km'] 
+                                                + $unTypeDeFrais['quantite'];
+                                    break;
+                                case 'NUI':
+                                    $qteFrais = $unFrais['nuitee'] 
+                                                + $unTypeDeFrais['quantite'];
+                                    break;
+                                case 'REP':
+                                    $qteFrais = $unFrais['repas'] 
+                                                + $unTypeDeFrais['quantite'];
+                                    break;
+                                default:
+                                }
+                                //print ("date = " . $dateFrais . " type = " . $unTypeDeFrais['idfraisforfait'] . "qte = " . $qteFrais);
+                                updateLigneFraisForfaitise($mPDO, $idVisiteur,
+                                                            $moisCourant, 
+                                                            $unTypeDeFrais, 
+                                                            $qteFrais);
+                            }
+                        }
+                    }                  
+                    // Insertion des frais hors forfait
+                    foreach ($unFrais['fraisHf'] as $unFraisHf) {
+                        $dateHf = modifDate($dateFrais, "hf", $unFraisHf['jour']);
+                        //print ("Jour = " . $unFraisHf['jour'] . " / Motif = " . $unFraisHf['motif'] . " / Montant = " . $unFraisHf['montant']);
                         nouvelleLigneHf($mPDO, $idVisiteur, $moisCourant, $unFraisHf,
                                         $dateHf);
                     }
@@ -182,14 +187,14 @@ if ($operation) {
 function estPremierFraisMois($mPDO, $idVisiteur, $dateFrais): bool 
 {
     //print ("idvisi = " . $idVisiteur . " date = " . $dateFrais);
-
+    
     $boolReturn = true;
     $ficheFrais = getFicheFrais($mPDO, $idVisiteur, $dateFrais);
 
     if ($ficheFrais) {
         $boolReturn = false;
     }
-
+    
     return $boolReturn;
 }
 
@@ -200,8 +205,7 @@ function estPremierFraisMois($mPDO, $idVisiteur, $dateFrais): bool
  * @param String $idVisiteur    ID du visiteur
  * @param String $dateFrais     Mois sous la forme aaaamm
  */
-function getFicheFrais($mPDO, $idVisiteur, $dateFrais) 
-{
+function getFicheFrais($mPDO, $idVisiteur, $dateFrais) {
     $requete = $mPDO->prepare(
             'SELECT * '
             . 'FROM fichefrais '
@@ -213,6 +217,7 @@ function getFicheFrais($mPDO, $idVisiteur, $dateFrais)
     $requete->execute();
     return $requete->fetch();
 }
+
 
 /**
  * Récupère les frais forfaitisés déjà enregistrés en base distante pour le mois donné
@@ -248,8 +253,8 @@ function getFraisMois($mPDO, $idVisiteur, $dateFrais): array
  * @param Integer   $qteFrais           La quantité de frais mise à jour qui vient
  *                                      remplacer la quantité préalablement enregistrée
  */
-function updateLigneFraisForfaitise($mPDO, $idVisiteur, $dateFrais, $unTypeDeFrais,
-        $qteFrais) 
+function updateLigneFraisForfaitise($mPDO, $idVisiteur, $dateFrais, $unTypeDeFrais, 
+                                    $qteFrais) 
 {
     $requete = $mPDO->prepare(
             "UPDATE lignefraisforfait "
@@ -351,65 +356,57 @@ function nouvelleLigneHf($mPDO, $idVisiteur, $dateFrais, $unFraisHf, $dateHf)
 }
 
 /**
- * Détermine la validité de la date d'un frais.
+ * Calcule l'intervalle entre 2 dates.
  * 
- * Un frais hors forfait est considéré valide s'il date de moins d'un an.
- * Au mois d'Août 2021 on peut saisir un frais hors forfait allant de Septembre 
- * 2020 à Août 2021. On ne peut pas non plus saisir un frais pour un jour ultérieur
- * au jour de saisie.
+ * Le calcul soustrait le mois suivant celui passé en paramètre à la date d'aujourd'hui
+ * grâce à la fonction <code>diff()</code> de la classe DateTime
+ * d'où le test "< 12" lors de l'appel de la fonction pour contrer le fait que le 
+ * mois retranché est le suivant du mois passé en paramètre.
  * 
- * @param String    $dateFraisHf Date sous la forme AAAA-MM-JJ
- * @return bool     Retourne vrai si la date passée en paramètre est valide
+ * @param  String    $dateFrais  Mois sous la forme aaaamm
+ * 
+ * @return Integer              Le nombre de mois séparant les 2 dates
  */
-function diffDates($dateFraisHf): bool 
+function diffDates($dateFrais): int 
 {
-    // Affectation du fuseau horaire de Paris pour éviter que le décalage horaire 
-    // avec les US, qui sont pris en fuseau horaire par défaut, ne fausse la date
-    // du jour de saisie
-    $d1 = new DateTime('NOW', new DateTimeZone('Europe/Paris'));
-    $d2 = new DateTime($dateFraisHf, new DateTimeZone('Europe/Paris'));
+    $dateAuj = date('Ym');
+    $date = modifDate($dateFrais, "", "");
+
+    $d1 = new DateTime($dateAuj);
+    $d2 = new DateTime($date);
+
+    $intervalle = $d2->diff($d1);
+    $diffMois = $intervalle->y * 12 + $intervalle->m;
     
-    // Calcul de la différence entre les 2 objets DateTime : renvoie un objet 
-    // DateInterval
-    // voir https://www.php.net/manual/fr/class.dateinterval.php
-    $interval = $d2->diff($d1);
-    
-    // True si la date effective du frais hors forfait est valide
-    $isDateValid = false; 
- 
-    // La propriété "invert" d'un objet DateInterval = 0 lorsque la date qui est 
-    // soustraite est inférieure à la date de référence, sinon = 1.
-    if (!$interval->invert){
-        // Si l'année des 2 dates est la même le frais est forcément valide
-        if ($d1->format('Y') === $d2->format('Y')){
-            $isDateValid = true;
-        }
-        else{
-            // Si l'année du frais est inférieure à la date du jour de saisie
-            // le mois du frais doit être supérieur au mois de la date de saisie
-            // et la différence entre les 2 dates inférieure ou égale à 366 jours
-            if ($d2->format('m') > $d1->format('m') && $interval->days <= 366){
-                $isDateValid = true;
-            }
-        }
+    // La propriété "invert" d'un objet DateTime = 0 lorsque la date qui est soustraite
+    // est inférieure à la date de référence, sinon = 1.
+    if ($intervalle->invert == 0){
+        return $diffMois;
     }
-    return $isDateValid;
+    else{
+        return $diffMois * 100;
+    }
 }
 
 /**
  * Modifie le format d'une date
-
+ * 
+ * Pour un frais forfaitisé la date sera formatée de la manière AAAA-MM
  * Pour un frais hors forfait le format de sortie sera AAAA-MM-JJ
  * 
  * @param String  $dateFrais    La date dont le format doit être modifié
+ * @param String  $typeFrais    Vide pour un frais forfaitisé, "hf" pour un hors forfait
  * @param Integer $jour         Le jour du mois d'un frais hors forfait
  * 
- * @return String               La date dont le format a été modifié 
+ * @return string               la date dont le format a été modifié 
  */
-function modifDate($dateFrais, $jour): string 
+function modifDate($dateFrais, $typeFrais, $jour): string 
 {
     $date = substr_replace($dateFrais, "-", 4, 0);
-    return substr_replace($date, "-" . $jour, 7, 0);
+    if ($typeFrais == "hf") {
+        $date = substr_replace($date, "-" . $jour, 7, 0);
+    }
+    return $date;
 }
 
 /**
@@ -429,26 +426,36 @@ function login($mPDO)
     // Récupération depuis la base distante de l'id et du password
     // correspondant à l'identifiant envoyé par l'application
     $requete = $mPDO->prepare(
-            'SELECT id, mdp FROM visiteur'
+            'SELECT id, mdp, type_utilisateur FROM utilisateur'
             . ' WHERE login = :login'
     );
     $requete->bindParam(':login', $infosLogin[0], PDO::PARAM_STR);
     $requete->execute();
     $resultatReq = $requete->fetch();
-
-    if ($infosLogin[1] == $resultatReq['mdp']) {
-        $array = [
-            'isLogInValid' => "true",
-            'idVisiteur' => $resultatReq['id']
-        ];
-    } else {
-        $array = ['isLogInValid' => "false"];
+    
+    // Utilisateur trouvé
+    if ($resultatReq) {
+        $typeUsr = $resultatReq['type_utilisateur'];
+        $mdp = $resultatReq['mdp'];   
+        
+        // Login valide si les mdp concordent et si l'utilisateur est un visiteur médical
+        if ($typeUsr == 1 && password_verify($infosLogin[1], $mdp)){
+            $resultatConnexion = [
+                'isLogInValid' => "true",
+                'idVisiteur' => $resultatReq['id']
+            ];
+        } else {
+            $resultatConnexion = ['isLogInValid' => "false"];
+        }
+    }
+    else {
+        $resultatConnexion = ['isLogInValid' => "false"];
     }
 
     // Renvoi du résultat du login vers l'application Android
     // Un tableau associatif est utilisé pour renvoyer le résultat du login ainsi
     // que l'ID du visiteur afin de stocker cette information dans un souci de 
     // réutilisation pour le transfert des données
-    print (json_encode($array));
+    print (json_encode($resultatConnexion));
 }
 ?>
